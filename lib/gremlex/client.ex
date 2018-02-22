@@ -18,12 +18,14 @@ defmodule Gremlex.Client do
   def query(query) do
     payload =
       query
-      |> Request.new
-      |> Poison.encode!
-    mime_type_length = << String.length @mimetype >>
+      |> Request.new()
+      |> Poison.encode!()
+
+    mime_type_length = <<String.length(@mimetype)>>
     message = mime_type_length <> @mimetype <> payload
     Logger.debug("message: #{message}")
-    :poolboy.transaction(:gremlex, fn (worker_pid) ->
+
+    :poolboy.transaction(:gremlex, fn worker_pid ->
       GenServer.call(worker_pid, {:query, payload})
     end)
   end
@@ -32,9 +34,11 @@ defmodule Gremlex.Client do
 
   def handle_call({:query, payload}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
+
     case Socket.Web.recv!(socket) do
       {:text, data} ->
         {:reply, Poison.decode!(data), state}
+
       {:ping, _} ->
         Socket.Web.send!(socket, {:pong, ""})
     end

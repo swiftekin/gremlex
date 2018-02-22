@@ -2,7 +2,7 @@ defmodule Gremlex.Vertex do
   alias Gremlex.Vertex
   alias Gremlex.Http
 
-  @type t :: %Gremlex.Vertex{label: String.t, id: number(), properties: map()}
+  @type t :: %Gremlex.Vertex{label: String.t(), id: number(), properties: map()}
   @enforce_keys [:label, :id]
   @derive [Poison.Encoder]
   defstruct [:label, :id, :properties]
@@ -14,7 +14,7 @@ defmodule Gremlex.Vertex do
 
   def property(vertex_id, key, value) do
     "g.V(#{vertex_id}).property('#{key}', '#{value}')"
-    |> Http.build
-    |> Http.post
+    |> Http.build()
+    |> Http.post()
   end
 end

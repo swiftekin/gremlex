@@ -14,7 +14,7 @@ defmodule Gremlex.Http do
   end
 
   def post(payload) do
-    IO.inspect Poison.encode!(payload), label: "payload"
+    IO.inspect(Poison.encode!(payload), label: "payload")
     HTTPoison.post(@host, Poison.encode!(payload))
   end
 end

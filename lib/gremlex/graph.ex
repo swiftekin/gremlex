@@ -11,19 +11,19 @@ defmodule Gremlex.Graph do
   """
   alias :queue, as: Queue
 
-  @spec t :: {[],[]}
+  @spec t :: {[], []}
 
   @doc """
   Start of graph traversal. All graph operations are stored in a queue.
   """
-  @spec g :: {Gremlex.Graph.t}
-  def g, do: Queue.new
+  @spec g :: {Gremlex.Graph.t()}
+  def g, do: Queue.new()
 
   @doc """
   Appends an addVertex command to the traversal.
   Returns a graph to allow chaining.
   """
-  @spec add_v(Gremlex.Graph.t, any()) :: Gremlex.Graph.t
+  @spec add_v(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def add_v(graph, id) do
     enqueue(graph, "addV", [id])
   end
@@ -32,7 +32,7 @@ defmodule Gremlex.Graph do
   Appends an addEdge command to the traversal.
   Returns a graph to allow chaining.
   """
-  @spec add_edge(Gremlex.Graph.t, any()) :: Gremlex.Graph.t
+  @spec add_edge(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def add_edge(graph, edge) do
     enqueue(graph, "addEdge", [edge])
   end
@@ -41,7 +41,7 @@ defmodule Gremlex.Graph do
   Appends property command to the traversal.
   Returns a graph to allow chaining.
   """
-  @spec property(Gremlex.Graph.t, String.t, any()) :: Gremlex.Graph.t
+  @spec property(Gremlex.Graph.t(), String.t(), any()) :: Gremlex.Graph.t()
   def property(graph, key, value) do
     enqueue(graph, "property", [key, value])
   end
@@ -50,7 +50,7 @@ defmodule Gremlex.Graph do
   Appends values command to the traversal.
   Returns a graph to allow chaining.
   """
-  @spec values(Gremlex.Graph.t, String.t) :: Gremlex.Graph.t
+  @spec values(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def values(graph, key) do
     enqueue(graph, "values", [key])
   end
@@ -59,7 +59,7 @@ defmodule Gremlex.Graph do
   Appends values the `V` command allowing you to select a vertex.
   Returns a graph to allow chaining.
   """
-  @spec values(Gremlex.Graph.t, number()) :: Gremlex.Graph.t
+  @spec values(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
   def v(graph, id) do
     enqueue(graph, "V", [id])
   end
@@ -71,19 +71,21 @@ defmodule Gremlex.Graph do
   @doc """
   Compiles a graph into the Gremlin query.
   """
-  @spec encode(Gremlex.Graph.t) :: String.t
+  @spec encode(Gremlex.Graph.t()) :: String.t()
   def encode(graph) do
     encode(graph, "g")
   end
 
-  defp encode({[],[]}, acc), do: acc
+  defp encode({[], []}, acc), do: acc
 
   defp encode(graph, acc) do
     {{:value, {op, args}}, remainder} = :queue.out(graph)
+
     args =
       args
       |> Enum.map(fn s -> "'#{s}'" end)
       |> Enum.join(", ")
+
     encode(remainder, acc <> ".#{op}(#{args})")
   end
 end
