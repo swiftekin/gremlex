@@ -14,7 +14,7 @@ defmodule Gremlex.Graph do
   """
   alias :queue, as: Queue
 
-  @spec t :: {[], []}
+  @type t :: {[], []}
 
   @doc """
   Start of graph traversal. All graph operations are stored in a queue.
