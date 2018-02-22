@@ -15,6 +15,10 @@ defmodule Gremlex.Client do
 
   # Public Methods
 
+  @doc """
+  Accepts a graph which it converts into a query and queries the database.
+  """
+  @spec query(Gremlex.Graph.t()) :: map()
   def query(query) do
     payload =
       query

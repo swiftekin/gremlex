@@ -8,6 +8,9 @@ defmodule Gremlex.Graph do
   The query: `g.V(1).values("name")`
 
   Would be translated to: `g |> v(1) |> values("name")`
+
+  Note: This module doesn't actually execute any queries, it just allows you to build one.
+  For query execution see `Gremlex.Client.query/1`
   """
   alias :queue, as: Queue
 
