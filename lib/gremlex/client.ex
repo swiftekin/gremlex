@@ -1,26 +1,22 @@
 defmodule Gremlex.Client do
-  use WebSockex
+  # use WebSockex
   require Logger
   alias Gremlex.Request
   @mimetype "application/json"
 
-  def start_link([host]) do
-    WebSockex.start_link(host, __MODULE__, [])
+  def start_link([host, port, path]) do
+    socket = Socket.Web.connect!(host, port, path: path)
+    GenServer.start_link(__MODULE__, socket, [])
   end
 
-  def handle_connect(_conn, state) do
-    Logger.info("Connected!")
+  def init(socket) do
+    state = %{socket: socket}
     {:ok, state}
   end
 
+  # Public Methods
+
   def query(query) do
-    # payload = """
-    # {"requestId":"1d6d02bd-8e56-421d-9438-3bd6d0079ff1",
-    # "op":"eval",
-    # "processor":"",
-    # "args":{"gremlin":"g.addV('person').property('country', 'usa')",
-    # "language":"gremlin-groovy"}}
-    # """
     payload =
       query
       |> Request.new
@@ -29,12 +25,19 @@ defmodule Gremlex.Client do
     message = mime_type_length <> @mimetype <> payload
     Logger.debug("message: #{message}")
     :poolboy.transaction(:gremlex, fn (worker_pid) ->
-      WebSockex.send_frame(worker_pid, {:binary, message})
+      GenServer.call(worker_pid, {:query, payload})
     end)
   end
 
-  def handle_frame({type, msg}, state) do
-    IO.puts "Received Message - Type: #{inspect type} -- Message: #{inspect msg}"
-    {:ok, state}
+  # Private Methods
+
+  def handle_call({:query, payload}, _from, %{socket: socket} = state) do
+    Socket.Web.send!(socket, {:text, payload})
+    case Socket.Web.recv!(socket) do
+      {:text, data} ->
+        {:reply, Poison.decode!(data), state}
+      {:ping, _} ->
+        Socket.Web.send!(socket, {:pong, ""})
+    end
   end
 end

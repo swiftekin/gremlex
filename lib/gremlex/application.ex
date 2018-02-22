@@ -8,6 +8,8 @@ defmodule Gremlex.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     host = Confex.fetch_env!(:gremlex, :host)
+    port = Confex.fetch_env!(:gremlex, :port)
+    path = Confex.fetch_env!(:gremlex, :path)
     pool_size = Confex.fetch_env!(:gremlex, :pool_size)
 
     pool_options = [
@@ -18,7 +20,7 @@ defmodule Gremlex.Application do
     ]
 
     children = [
-      :poolboy.child_spec(:gremlex, pool_options, [host])
+      :poolboy.child_spec(:gremlex, pool_options, [host, port, path])
       # Starts a worker by calling: Gremlex.Worker.start_link(arg)
       # {Gremlex.Worker, arg},
     ]

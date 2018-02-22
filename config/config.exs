@@ -30,5 +30,7 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 
 config :gremlex,
-  host: "ws://localhost:8182/gremlin",
+  host: "127.0.0.1",
+  port: 8182,
+  path: "/gremlin",
   pool_size: 10
