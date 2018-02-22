@@ -1,5 +1,4 @@
 defmodule Gremlex.Client do
-  # use WebSockex
   require Logger
   alias Gremlex.Request
   @mimetype "application/json"
