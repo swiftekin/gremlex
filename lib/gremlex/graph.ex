@@ -40,6 +40,14 @@ defmodule Gremlex.Graph do
     enqueue(graph, "addEdge", [edge])
   end
 
+  def has_label(graph, label) do
+    enqueue(graph, "hasLabel", [label])
+  end
+
+  def has(graph, key, value) do
+    enqueue(graph, "has", [key, value])
+  end
+
   @doc """
   Appends property command to the traversal.
   Returns a graph to allow chaining.
@@ -62,9 +70,38 @@ defmodule Gremlex.Graph do
   Appends values the `V` command allowing you to select a vertex.
   Returns a graph to allow chaining.
   """
-  @spec values(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
+  @spec v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def v(graph) do
+    enqueue(graph, "V", [])
+  end
+
+  @doc """
+  Appends values the `V` command allowing you to select a vertex.
+  Returns a graph to allow chaining.
+  """
+  @spec v(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
   def v(graph, id) do
     enqueue(graph, "V", [id])
+  end
+
+  def out_e(graph, edge) do
+    enqueue(graph, "outE", [edge])
+  end
+
+  def out(graph, edge) do
+    enqueue(graph, "out", [edge])
+  end
+
+  def and_(graph) do
+    enqueue(graph, "and", [])
+  end
+
+  def in_v(graph) do
+    enqueue(graph, "inV", [])
+  end
+
+  def where(graph, args) do
+    enqueue(graph, "where", [args])
   end
 
   defp enqueue(graph, op, args \\ []) do
