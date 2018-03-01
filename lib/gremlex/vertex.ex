@@ -7,14 +7,17 @@ defmodule Gremlex.Vertex do
   @derive [Poison.Encoder]
   defstruct [:label, :id, :properties]
 
-  def add(%Vertex{label: label, id: id, properties: _props}) do
-    request = %{gremlin: "graph.addVertex(label, p1, id, p2)", bindings: %{p1: label, p2: id}}
-    Http.post(request)
+  def add_properties(%Vertex{properties: nil} = vertex, properties) do
+    Map.put(vertex, :properties, properties)
   end
 
-  def property(vertex_id, key, value) do
-    "g.V(#{vertex_id}).property('#{key}', '#{value}')"
-    |> Http.build()
-    |> Http.post()
+  def add_properties(%Vertex{properties: this} = vertex, that) do
+    properties = Map.merge(this, that)
+    Map.put(vertex, :properties, properties)
+  end
+
+  def add_property(%Vertex{properties: props} = vertex, label, value) do
+    properties = Map.put(props, label, value)
+    Map.put(vertex, :properties, properties)
   end
 end
