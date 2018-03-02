@@ -51,6 +51,8 @@ defmodule Gremlex.Deserializer do
     Vertex.add_properties(vertex, serialized_properties)
   end
 
+  defp deserialize("g:VertexProperty", %{"@type" => type, "@value" => value}), do: deserialize(type, value)
+
   defp deserialize("g:Int64", value) when is_number(value), do: value
 
   defp deserialize("g:Int32", value), do: value
