@@ -1,7 +1,12 @@
 defmodule Gremlex.Client do
+  @moduledoc """
+  Gremlin Websocket Client
+  """
+
   require Logger
   alias Gremlex.Request
-  alias Gremlex.Vertex
+  alias Gremlex.Deserializer
+
   @mimetype "application/json"
 
   def start_link([host, port, path]) do
@@ -26,81 +31,40 @@ defmodule Gremlex.Client do
       |> Request.new()
       |> Poison.encode!()
 
-    mime_type_length = <<String.length(@mimetype)>>
-    message = mime_type_length <> @mimetype <> payload
-    Logger.debug("message: #{message}")
-
     :poolboy.transaction(:gremlex, fn worker_pid ->
       GenServer.call(worker_pid, {:query, payload})
     end)
   end
 
-  # Private Methods
+  # Server Methods
 
   def handle_call({:query, payload}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
 
+    task = Task.async(fn -> recv(socket, []) end)
+    result = Task.await(task)
+
+    {:reply, result, state}
+  end
+
+  # Private Methods
+
+  defp recv(socket, acc \\ []) do
     case Socket.Web.recv!(socket) do
       {:text, data} ->
-        result =
-          data
-          |> Poison.decode!
-          |> deserialize
-
-        {:reply, result, state}
-
+        response = Poison.decode!(data)
+        result = Deserializer.deserialize(response)
+        # Continue to block until we receive a 200 status code
+        if response["status"]["code"] == 200 do
+          acc ++ result
+        else
+          result = Deserializer.deserialize(response)
+          recv(socket, acc ++ result)
+        end
       {:ping, _} ->
+        # Keep the connection alive
         Socket.Web.send!(socket, {:pong, ""})
-    end
-  end
-
-  defp deserialize(response) do
-    %{"result" => result} = response
-    case result["data"] do
-      nil ->
-        nil
-      %{"@type" => type, "@value" => value} ->
-        deserialize(type, value)
-    end
-  end
-
-  defp deserialize("g:List", value) do
-    Enum.map(value, fn
-      %{"@type" => type, "@value" => value} ->
-        deserialize(type, value)
-      value ->
-        value
-    end)
-  end
-
-  defp deserialize("g:Vertex", value) do
-    %{"id" => %{"@type" => id_type, "@value" => id_value},
-      "label" => label,
-      "properties" => properties} = value
-
-    id = deserialize(id_type, id_value)
-
-    vertex = %Vertex{id: id,
-                     label: label}
-
-    serialized_properties =
-      Enum.reduce(properties, %{}, fn ({label, [prop]}, acc) ->
-        %{"@type" => type, "@value" => %{"value" => value}} = prop
-        IO.inspect value, label: "@value"
-        Map.put(acc, String.to_existing_atom(label), value)
-      end)
-
-    Vertex.add_properties(vertex, serialized_properties)
-  end
-
-  defp deserialize("g:Int64", value) when is_number(value), do: value
-
-  defp deserialize("g:Int64", value) when is_binary(value) do
-    case Integer.parse(value) do
-      {val, ""} ->
-        val
-      :error ->
-        0
+        recv(socket, acc)
     end
   end
 end
