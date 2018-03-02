@@ -1,6 +1,5 @@
 defmodule Gremlex.Vertex do
   alias Gremlex.Vertex
-  alias Gremlex.Http
 
   @type t :: %Gremlex.Vertex{label: String.t(), id: number(), properties: map()}
   @enforce_keys [:label, :id]

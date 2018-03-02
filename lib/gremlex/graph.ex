@@ -104,7 +104,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "where", [args])
   end
 
-  defp enqueue(graph, op, args \\ []) do
+  defp enqueue(graph, op, args) do
     Queue.in({op, args}, graph)
   end
 
