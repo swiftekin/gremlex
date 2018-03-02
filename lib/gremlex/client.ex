@@ -61,6 +61,7 @@ defmodule Gremlex.Client do
           result = Deserializer.deserialize(response)
           recv(socket, acc ++ result)
         end
+
       {:ping, _} ->
         # Keep the connection alive
         Socket.Web.send!(socket, {:pong, ""})
