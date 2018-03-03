@@ -14,7 +14,14 @@ defmodule Gremlex.Edge do
   def new(id, label, in_vertex_id, in_vertex_label, out_vertex_id, out_vertex_label) do
     in_vertex = %Gremlex.Vertex{id: in_vertex_id, label: in_vertex_label}
     out_vertex = %Gremlex.Vertex{id: out_vertex_id, label: out_vertex_label}
-    %Gremlex.Edge{id: id, label: label, in_vertex: in_vertex, out_vertex: out_vertex, properties: %{}}
+
+    %Gremlex.Edge{
+      id: id,
+      label: label,
+      in_vertex: in_vertex,
+      out_vertex: out_vertex,
+      properties: %{}
+    }
   end
 
   def from_response(value) do
