@@ -7,8 +7,6 @@ defmodule Gremlex.Client do
   alias Gremlex.Request
   alias Gremlex.Deserializer
 
-  @mimetype "application/json"
-
   def start_link([host, port, path]) do
     socket = Socket.Web.connect!(host, port, path: path)
     GenServer.start_link(__MODULE__, socket, [])
@@ -41,7 +39,7 @@ defmodule Gremlex.Client do
   def handle_call({:query, payload}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
 
-    task = Task.async(fn -> recv(socket, []) end)
+    task = Task.async(fn -> recv(socket) end)
     result = Task.await(task)
 
     {:reply, result, state}
