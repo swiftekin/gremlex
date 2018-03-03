@@ -3,15 +3,29 @@ defmodule Gremlex.Client do
   Gremlin Websocket Client
   """
 
+  @type State :: %{socket: Socket.Web.t()}
+
+  @type Response ::
+          list()
+          | {:error, :unauthorized, String.t()}
+          | {:error, :malformed_request, String.t()}
+          | {:error, :invalid_request_arguments, String.t()}
+          | {:error, :server_error, String.t()}
+          | {:error, :script_evaluation_error, String.t()}
+          | {:error, :server_timeout, String.t()}
+          | {:error, :server_serialization_error, String.t()}
+
   require Logger
   alias Gremlex.Request
   alias Gremlex.Deserializer
 
+  @spec start_link([String.t(), number(), String.t()]) :: pid()
   def start_link([host, port, path]) do
     socket = Socket.Web.connect!(host, port, path: path)
     GenServer.start_link(__MODULE__, socket, [])
   end
 
+  @spec init(Socket.Web.t()) :: State
   def init(socket) do
     state = %{socket: socket}
     {:ok, state}
@@ -22,7 +36,7 @@ defmodule Gremlex.Client do
   @doc """
   Accepts a graph which it converts into a query and queries the database.
   """
-  @spec query(Gremlex.Graph.t()) :: map()
+  @spec query(Gremlex.Graph.t()) :: Response
   def query(query) do
     payload =
       query
@@ -35,7 +49,7 @@ defmodule Gremlex.Client do
   end
 
   # Server Methods
-
+  @spec handle_call({:query, String.t()}, pid(), State) :: {:reply, Response, State}
   def handle_call({:query, payload}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
 
@@ -46,15 +60,7 @@ defmodule Gremlex.Client do
   end
 
   # Private Methods
-  @spec recv(Socket.Web.t(), list()) ::
-          list()
-          | {:error, :unauthorized, String.t()}
-          | {:error, :malformed_request, String.t()}
-          | {:error, :invalid_request_arguments, String.t()}
-          | {:error, :server_error, String.t()}
-          | {:error, :script_evaluation_error, String.t()}
-          | {:error, :server_timeout, String.t()}
-          | {:error, :server_serialization_error, String.t()}
+  @spec recv(Socket.Web.t(), list()) :: Response
   defp recv(socket, acc \\ []) do
     case Socket.Web.recv!(socket) do
       {:text, data} ->
