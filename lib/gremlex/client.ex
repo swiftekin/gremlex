@@ -46,18 +46,50 @@ defmodule Gremlex.Client do
   end
 
   # Private Methods
-
+  @spec recv(Socket.Web.t(), list()) ::
+          list()
+          | {:error, :unauthorized, String.t()}
+          | {:error, :malformed_request, String.t()}
+          | {:error, :invalid_request_arguments, String.t()}
+          | {:error, :server_error, String.t()}
+          | {:error, :script_evaluation_error, String.t()}
+          | {:error, :server_timeout, String.t()}
+          | {:error, :server_serialization_error, String.t()}
   defp recv(socket, acc \\ []) do
     case Socket.Web.recv!(socket) do
       {:text, data} ->
         response = Poison.decode!(data)
         result = Deserializer.deserialize(response)
+        status = response["status"]["code"]
+        error_message = response["status"]["message"]
         # Continue to block until we receive a 200 status code
-        if response["status"]["code"] == 200 do
-          acc ++ result
-        else
-          result = Deserializer.deserialize(response)
-          recv(socket, acc ++ result)
+        case status do
+          200 ->
+            acc ++ result
+
+          206 ->
+            recv(socket, acc ++ result)
+
+          401 ->
+            {:error, :unauthorized, error_message}
+
+          409 ->
+            {:error, :malformed_request, error_message}
+
+          499 ->
+            {:error, :invalid_request_arguments, error_message}
+
+          500 ->
+            {:error, :server_error, error_message}
+
+          597 ->
+            {:error, :script_evaluation_error, error_message}
+
+          598 ->
+            {:error, :server_timeout, error_message}
+
+          599 ->
+            {:error, :server_serialization_error, error_message}
         end
 
       {:ping, _} ->
