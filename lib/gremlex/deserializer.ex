@@ -2,7 +2,7 @@ defmodule Gremlex.Deserializer do
   @moduledoc """
   Deserializer module for deserializing data returned back from Gremlin.
   """
-  alias Gremlex.Vertex
+  alias Gremlex.{Edge, Vertex}
 
   def deserialize(response) do
     %{"result" => result} = response
@@ -37,30 +37,14 @@ defmodule Gremlex.Deserializer do
   end
 
   defp deserialize("g:Vertex", value) do
-    %{
-      "id" => %{"@type" => id_type, "@value" => id_value},
-      "label" => label,
-      "properties" => properties
-    } = value
-
-    id = deserialize(id_type, id_value)
-
-    vertex = %Vertex{id: id, label: label}
-
-    serialized_properties =
-      Enum.reduce(properties, %{}, fn {label, [prop]}, acc ->
-        %{"@type" => type, "@value" => %{"value" => value}} = prop
-        Map.put(acc, String.to_atom(label), deserialize(type, value))
-      end)
-
-    Vertex.add_properties(vertex, serialized_properties)
+    Vertex.from_response(value)
   end
 
   defp deserialize("g:VertexProperty", %{"@type" => type, "@value" => value}),
     do: deserialize(type, value)
 
   defp deserialize("g:Edge", value) do
-    Gremlex.Edge.from_response(value)
+    Edge.from_response(value)
   end
 
   defp deserialize("g:Int64", value) when is_number(value), do: value
