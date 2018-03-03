@@ -20,7 +20,7 @@ defmodule Gremlex.Application do
     ]
 
     children = [
-      :poolboy.child_spec(:gremlex, pool_options, [host, port, path])
+      :poolboy.child_spec(:gremlex, pool_options, {host, port, path})
       # Starts a worker by calling: Gremlex.Worker.start_link(arg)
       # {Gremlex.Worker, arg},
     ]

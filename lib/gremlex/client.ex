@@ -3,9 +3,11 @@ defmodule Gremlex.Client do
   Gremlin Websocket Client
   """
 
-  @type State :: %{socket: Socket.Web.t()}
+  @type state :: %{socket: Socket.Web.t()}
 
-  @type Response ::
+  @type start_params = {String.t(), number(), String.t()}
+
+  @type response ::
           list()
           | {:error, :unauthorized, String.t()}
           | {:error, :malformed_request, String.t()}
@@ -19,13 +21,13 @@ defmodule Gremlex.Client do
   alias Gremlex.Request
   alias Gremlex.Deserializer
 
-  @spec start_link([String.t(), number(), String.t()]) :: pid()
-  def start_link([host, port, path]) do
+  @spec start_link({String.t(), number(), String.t()}) :: pid()
+  def start_link({host, port, path}) do
     socket = Socket.Web.connect!(host, port, path: path)
     GenServer.start_link(__MODULE__, socket, [])
   end
 
-  @spec init(Socket.Web.t()) :: State
+  @spec init(Socket.Web.t()) :: state
   def init(socket) do
     state = %{socket: socket}
     {:ok, state}
@@ -49,7 +51,7 @@ defmodule Gremlex.Client do
   end
 
   # Server Methods
-  @spec handle_call({:query, String.t()}, pid(), State) :: {:reply, Response, State}
+  @spec handle_call({:query, String.t()}, pid(), state) :: {:reply, response, state}
   def handle_call({:query, payload}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
 
@@ -60,7 +62,7 @@ defmodule Gremlex.Client do
   end
 
   # Private Methods
-  @spec recv(Socket.Web.t(), list()) :: Response
+  @spec recv(Socket.Web.t(), list()) :: response
   defp recv(socket, acc \\ []) do
     case Socket.Web.recv!(socket) do
       {:text, data} ->
