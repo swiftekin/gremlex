@@ -105,6 +105,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "to/1" do
+    test "adds a to function to the queue" do
+      actual_graph = g() |> to(1)
+      expected_graph = Queue.in({"to", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "encode/1" do
     test "compiles queue into a query" do
       graph = g() |> v() |> has_label("Intent") |> has("name", "request.group") |> out("sedan") |> values("name")

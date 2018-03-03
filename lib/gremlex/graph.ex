@@ -23,7 +23,7 @@ defmodule Gremlex.Graph do
   def g, do: Queue.new()
 
   @doc """
-  Appends an addVertex command to the traversal.
+  Appends an addV command to the traversal.
   Returns a graph to allow chaining.
   """
   @spec add_v(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
@@ -32,12 +32,12 @@ defmodule Gremlex.Graph do
   end
 
   @doc """
-  Appends an addEdge command to the traversal.
+  Appends an addE command to the traversal.
   Returns a graph to allow chaining.
   """
-  @spec add_edge(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
-  def add_edge(graph, edge) do
-    enqueue(graph, "addEdge", [edge])
+  @spec add_e(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
+  def add_e(graph, edge) do
+    enqueue(graph, "addE", [edge])
   end
 
   def has_label(graph, label) do
@@ -71,8 +71,13 @@ defmodule Gremlex.Graph do
   Returns a graph to allow chaining.
   """
   @spec v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
-  def v(graph) do
+  def v({h, t} = graph) when is_list(h) and is_list(t) do
     enqueue(graph, "V", [])
+  end
+
+  @spec v(any()) :: Gremlex.Graph.t()
+  def v(id) do
+    %Gremlex.Vertex{id: id, label: ""}
   end
 
   @doc """
@@ -104,6 +109,10 @@ defmodule Gremlex.Graph do
     enqueue(graph, "where", [args])
   end
 
+  def to(graph, target) do
+    enqueue(graph, "to", [target])
+  end
+
   defp enqueue(graph, op, args) do
     Queue.in({op, args}, graph)
   end
@@ -123,7 +132,16 @@ defmodule Gremlex.Graph do
 
     args =
       args
-      |> Enum.map(fn s -> "'#{s}'" end)
+      |> Enum.map(fn
+        %Gremlex.Vertex{id: id} ->
+          "V(#{id})"
+
+        arg when is_number(arg) ->
+          "#{arg}"
+
+        s ->
+          "'#{s}'"
+      end)
       |> Enum.join(", ")
 
     encode(remainder, acc <> ".#{op}(#{args})")
