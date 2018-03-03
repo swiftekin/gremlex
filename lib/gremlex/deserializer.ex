@@ -59,6 +59,10 @@ defmodule Gremlex.Deserializer do
   defp deserialize("g:VertexProperty", %{"@type" => type, "@value" => value}),
     do: deserialize(type, value)
 
+  defp deserialize("g:Edge", value) do
+    Gremlex.Edge.from_response(value)
+  end
+
   defp deserialize("g:Int64", value) when is_number(value), do: value
 
   defp deserialize("g:Int32", value), do: value
