@@ -1,6 +1,8 @@
 defmodule Gremlex.GraphTests do
   import Gremlex.Graph
+  alias Gremlex.{Vertex, Graph}
   use ExUnit.Case
+  use ExUnitProperties
   alias :queue, as: Queue
 
   describe "g/0" do
@@ -17,10 +19,10 @@ defmodule Gremlex.GraphTests do
     end
   end
 
-  describe "add_edge/1" do
-    test "adds an addEdge function to the queue" do
-      actual_graph = g() |> add_edge("foo")
-      expected_graph = Queue.in({"addEdge", ["foo"]}, Queue.new())
+  describe "add_e/1" do
+    test "adds an addE step to the queue" do
+      actual_graph = g() |> add_e("foo")
+      expected_graph = Queue.in({"addE", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -43,7 +45,7 @@ defmodule Gremlex.GraphTests do
 
   describe "property/3" do
     test "adds a property function to the queue" do
-      actual_graph = g() |> property("foo", "bar")
+      actual_graph = g() |> Graph.property("foo", "bar")
       expected_graph = Queue.in({"property", ["foo", "bar"]}, Queue.new())
       assert actual_graph == expected_graph
     end
@@ -62,6 +64,14 @@ defmodule Gremlex.GraphTests do
       actual_graph = g() |> v()
       expected_graph = Queue.in({"V", []}, Queue.new())
       assert actual_graph == expected_graph
+    end
+
+    test "creates a vertex when the id is a number" do
+      check all n <- integer() do
+        actual_graph = v(n)
+        expected_graph = %Vertex{id: n, label: ""}
+        assert actual_graph == expected_graph
+      end
     end
   end
 
@@ -115,8 +125,29 @@ defmodule Gremlex.GraphTests do
 
   describe "encode/1" do
     test "compiles queue into a query" do
-      graph = g() |> v() |> has_label("Intent") |> has("name", "request.group") |> out("sedan") |> values("name")
-      expected_query = "g.V().hasLabel('Intent').has('name', 'request.group').out('sedan').values('name')"
+      graph =
+        g() |> v() |> has_label("Intent") |> has("name", "request.group") |> out("sedan")
+        |> values("name")
+
+      expected_query =
+        "g.V().hasLabel('Intent').has('name', 'request.group').out('sedan').values('name')"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+    end
+
+    test "compiles query with a vertex id correctly" do
+      graph = g() |> v(1)
+      expected_query = "g.V(1)"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+    end
+
+    test "compiles query with a vertex" do
+      graph = g() |> v(1) |> add_e("foo") |> to(v(2))
+      expected_query = "g.V(1).addE('foo').to(V(2))"
+
       actual_query = encode(graph)
       assert actual_query == expected_query
     end

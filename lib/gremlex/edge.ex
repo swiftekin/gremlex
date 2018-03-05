@@ -11,7 +11,15 @@ defmodule Gremlex.Edge do
         }
   defstruct [:label, :id, :in_vertex, :out_vertex, :properties]
 
-  def new(id, label, in_vertex_id, in_vertex_label, out_vertex_id, out_vertex_label) do
+  def new(
+        id,
+        label,
+        in_vertex_id,
+        in_vertex_label,
+        out_vertex_id,
+        out_vertex_label,
+        properties \\ %{}
+      ) do
     in_vertex = %Gremlex.Vertex{id: in_vertex_id, label: in_vertex_label}
     out_vertex = %Gremlex.Vertex{id: out_vertex_id, label: out_vertex_label}
 
@@ -20,7 +28,7 @@ defmodule Gremlex.Edge do
       label: label,
       in_vertex: in_vertex,
       out_vertex: out_vertex,
-      properties: %{}
+      properties: properties
     }
   end
 
@@ -34,9 +42,17 @@ defmodule Gremlex.Edge do
       "outVLabel" => out_v_label
     } = value
 
+    json_properties = Map.get(value, "properties", %{})
     id = Deserializer.deserialize(id_type, id_value)
     in_v_id = Deserializer.deserialize(in_v_id_type, in_v_id_value)
     out_v_id = Deserializer.deserialize(out_v_id_type, out_v_id_value)
+
+    properties =
+      Enum.reduce(json_properties, %{}, fn {key, prop_value}, acc ->
+        %{"@type" => type, "@value" => value} = prop_value
+        value = Deserializer.deserialize(type, value)
+        Map.put(acc, String.to_atom(key), value)
+      end)
 
     Gremlex.Edge.new(
       id,
@@ -44,7 +60,8 @@ defmodule Gremlex.Edge do
       in_v_id,
       in_v_label,
       out_v_id,
-      out_v_label
+      out_v_label,
+      properties
     )
   end
 end

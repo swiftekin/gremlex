@@ -2,7 +2,7 @@ defmodule Gremlex.Deserializer do
   @moduledoc """
   Deserializer module for deserializing data returned back from Gremlin.
   """
-  alias Gremlex.{Edge, Vertex}
+  alias Gremlex.{Edge, Vertex, VertexProperty}
 
   def deserialize(response) do
     %{"result" => result} = response
@@ -16,7 +16,7 @@ defmodule Gremlex.Deserializer do
     end
   end
 
-  defp deserialize("g:List", value) do
+  def deserialize("g:List", value) do
     Enum.map(value, fn
       %{"@type" => type, "@value" => value} ->
         deserialize(type, value)
@@ -26,46 +26,49 @@ defmodule Gremlex.Deserializer do
     end)
   end
 
-  defp deserialize("g:Set", value) do
-    Enum.map(value, fn
-      %{"@type" => type, "value" => value} ->
+  def deserialize("g:Set", value) do
+    value
+    |> Enum.map(fn
+      %{"@type" => type, "@value" => value} ->
         deserialize(type, value)
 
       value ->
         value
     end)
+    |> MapSet.new()
   end
 
-  defp deserialize("g:Vertex", value) do
+  def deserialize("g:Vertex", value) do
     Vertex.from_response(value)
   end
 
-  defp deserialize("g:VertexProperty", %{"@type" => type, "@value" => value}),
-    do: deserialize(type, value)
+  def deserialize("g:VertexProperty", value) do
+    VertexProperty.from_response(value)
+  end
 
-  defp deserialize("g:Edge", value) do
+  def deserialize("g:Edge", value) do
     Edge.from_response(value)
   end
 
-  defp deserialize("g:Int64", value) when is_number(value), do: value
+  def deserialize("g:Int64", value) when is_number(value), do: value
 
-  defp deserialize("g:Int32", value), do: value
+  def deserialize("g:Int32", value), do: value
 
-  defp deserialize("g:Double", value) when is_number(value), do: value
+  def deserialize("g:Double", value) when is_number(value), do: value
 
-  defp deserialize("g:Float", value) when is_number(value), do: value
+  def deserialize("g:Float", value) when is_number(value), do: value
 
-  defp deserialize("g:UUID", value), do: value
+  def deserialize("g:UUID", value), do: value
 
-  defp deserialize("g:Date", value) do
+  def deserialize("g:Date", value) do
     DateTime.from_unix!(value, :microsecond)
   end
 
-  defp deserialize("g:Timestamp", value) do
+  def deserialize("g:Timestamp", value) do
     DateTime.from_unix!(value, :microsecond)
   end
 
-  defp deserialize("g:Int64", value) when is_binary(value) do
+  def deserialize("g:Int64", value) when is_binary(value) do
     case Integer.parse(value) do
       {val, ""} ->
         val
@@ -75,5 +78,5 @@ defmodule Gremlex.Deserializer do
     end
   end
 
-  defp deserialize(_type, value), do: value
+  def deserialize(_type, value), do: value
 end

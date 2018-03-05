@@ -5,8 +5,6 @@ defmodule Gremlex.Client do
 
   @type state :: %{socket: Socket.Web.t()}
 
-  @type start_params = {String.t(), number(), String.t()}
-
   @type response ::
           list()
           | {:error, :unauthorized, String.t()}

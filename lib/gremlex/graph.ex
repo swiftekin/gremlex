@@ -1,13 +1,19 @@
 defmodule Gremlex.Graph do
   @moduledoc """
   Functions for traversing and mutating the Graph.
-  Graph operations are stored in a queue which can be created with `g/0`.
-  All functions return the queue so that they can be chained together
-  similar to how Gremlin queries work.
-  Ex:
-  The query: `g.V(1).values("name")`
 
-  Would be translated to: `g |> v(1) |> values("name")`
+  Graph operations are stored in a queue which can be created with `g/0`.
+  Mosts functions return the queue so that they can be chained together
+  similar to how Gremlin queries work.
+
+  Example:
+  ```
+  g.V(1).values("name")
+  ```
+  Would translate to
+  ```
+  g |> v(1) |> values("name")
+  ```
 
   Note: This module doesn't actually execute any queries, it just allows you to build one.
   For query execution see `Gremlex.Client.query/1`
@@ -19,7 +25,7 @@ defmodule Gremlex.Graph do
   @doc """
   Start of graph traversal. All graph operations are stored in a queue.
   """
-  @spec g :: {Gremlex.Graph.t()}
+  @spec g :: Gremlex.Graph.t()
   def g, do: Queue.new()
 
   @doc """
@@ -40,10 +46,12 @@ defmodule Gremlex.Graph do
     enqueue(graph, "addE", [edge])
   end
 
+  @spec has_label(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def has_label(graph, label) do
     enqueue(graph, "hasLabel", [label])
   end
 
+  @spec has(Gremlex.Graph.t(), any(), any()) :: Gremlex.Graph.t()
   def has(graph, key, value) do
     enqueue(graph, "has", [key, value])
   end
@@ -75,7 +83,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "V", [])
   end
 
-  @spec v(any()) :: Gremlex.Graph.t()
+  @spec v(number()) :: Gremlex.Vertex.t()
   def v(id) do
     %Gremlex.Vertex{id: id, label: ""}
   end
@@ -89,18 +97,22 @@ defmodule Gremlex.Graph do
     enqueue(graph, "V", [id])
   end
 
+  @spec out_e(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def out_e(graph, edge) do
     enqueue(graph, "outE", [edge])
   end
 
+  @spec out(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def out(graph, edge) do
     enqueue(graph, "out", [edge])
   end
 
+  @spec and_(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def and_(graph) do
     enqueue(graph, "and", [])
   end
 
+  @spec in_v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def in_v(graph) do
     enqueue(graph, "inV", [])
   end
@@ -109,6 +121,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "where", [args])
   end
 
+  @spec to(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def to(graph, target) do
     enqueue(graph, "to", [target])
   end

@@ -16,11 +16,6 @@ defmodule Gremlex.Vertex do
     Map.put(vertex, :properties, properties)
   end
 
-  def add_property(%Vertex{properties: props} = vertex, label, value) do
-    properties = Map.put(props, label, value)
-    Map.put(vertex, :properties, properties)
-  end
-
   def from_response(%{"id" => json_id, "label" => label, "properties" => properties}) do
     %{"@type" => id_type, "@value" => id_value} = json_id
 
@@ -29,9 +24,13 @@ defmodule Gremlex.Vertex do
     vertex = %Vertex{id: id, label: label}
 
     serialized_properties =
-      Enum.reduce(properties, %{}, fn {label, [prop]}, acc ->
-        %{"@type" => type, "@value" => %{"value" => value}} = prop
-        Map.put(acc, String.to_atom(label), Deserializer.deserialize(type, value))
+      Enum.reduce(properties, %{}, fn {label, property}, acc ->
+        values =
+          Enum.map(property, fn %{"@type" => type, "@value" => %{"value" => value}} ->
+            value
+          end)
+
+        Map.put(acc, String.to_atom(label), values)
       end)
 
     Vertex.add_properties(vertex, serialized_properties)
