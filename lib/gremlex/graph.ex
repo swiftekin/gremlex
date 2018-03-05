@@ -117,10 +117,6 @@ defmodule Gremlex.Graph do
     enqueue(graph, "inV", [])
   end
 
-  def where(graph, args) do
-    enqueue(graph, "where", [args])
-  end
-
   @spec to(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def to(graph, target) do
     enqueue(graph, "to", [target])
