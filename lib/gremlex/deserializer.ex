@@ -52,7 +52,7 @@ defmodule Gremlex.Deserializer do
 
   def deserialize("g:Int64", value) when is_number(value), do: value
 
-  def deserialize("g:Int32", value), do: value
+  def deserialize("g:Int32", value) when is_number(value), do: value
 
   def deserialize("g:Double", value) when is_number(value), do: value
 
