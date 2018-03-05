@@ -68,15 +68,5 @@ defmodule Gremlex.Deserializer do
     DateTime.from_unix!(value, :microsecond)
   end
 
-  def deserialize("g:Int64", value) when is_binary(value) do
-    case Integer.parse(value) do
-      {val, ""} ->
-        val
-
-      :error ->
-        0
-    end
-  end
-
   def deserialize(_type, value), do: value
 end
