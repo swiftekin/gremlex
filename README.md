@@ -29,13 +29,14 @@ Gremlex.Graph
 iex(2)> alias Gremlex.Client
 Gremlex.Client
 iex(3)> Graph.g() |> Graph.v() |> Client.query
-[
-  %Gremlex.Vertex{
-    id: 1,
-    label: "person",
-    properties: %{age: [29], name: ["marko"]}
-  }
-]
+{:ok,
+ [
+   %Gremlex.Vertex{
+     id: 1,
+     label: "person",
+     properties: %{age: [29], name: ["marko"]}
+   }
+ ]}
 ```
 
 ## Configuration

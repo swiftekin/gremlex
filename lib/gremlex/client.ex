@@ -6,7 +6,7 @@ defmodule Gremlex.Client do
   @type state :: %{socket: Socket.Web.t()}
 
   @type response ::
-          list()
+          {:ok, list()}
           | {:error, :unauthorized, String.t()}
           | {:error, :malformed_request, String.t()}
           | {:error, :invalid_request_arguments, String.t()}
@@ -71,7 +71,7 @@ defmodule Gremlex.Client do
         # Continue to block until we receive a 200 status code
         case status do
           200 ->
-            acc ++ result
+            {:ok, acc ++ result}
 
           206 ->
             recv(socket, acc ++ result)
