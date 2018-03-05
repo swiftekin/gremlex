@@ -26,8 +26,11 @@ defmodule Gremlex.Vertex do
     serialized_properties =
       Enum.reduce(properties, %{}, fn {label, property}, acc ->
         values =
-          Enum.map(property, fn %{"@type" => type, "@value" => %{"value" => value}} ->
-            value
+          Enum.map(property, fn
+            %{"@value" => %{"value" => %{"@type" => type, "@value" => value}}} ->
+              Deserializer.deserialize(type, value)
+            %{"@value" => %{"value" => value}} ->
+              value
           end)
 
         Map.put(acc, String.to_atom(label), values)
