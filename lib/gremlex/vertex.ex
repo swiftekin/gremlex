@@ -29,6 +29,7 @@ defmodule Gremlex.Vertex do
           Enum.map(property, fn
             %{"@value" => %{"value" => %{"@type" => type, "@value" => value}}} ->
               Deserializer.deserialize(type, value)
+
             %{"@value" => %{"value" => value}} ->
               value
           end)
