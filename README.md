@@ -1,6 +1,6 @@
 # Gremlex
 
-An Elixir client for Gremlin.
+An Elixir client for [Gremlin](http://tinkerpop.apache.org/gremlin.html).
 
 ## Installation
 
