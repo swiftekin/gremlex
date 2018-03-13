@@ -6,7 +6,7 @@ defmodule Gremlex.ClientTests do
     test "that it can return a successful query" do
       {result, response} = g() |> v() |> query
       assert result == :ok
-      assert Enum.count(response) == 6
+      assert Enum.count(response) > 0
     end
 
     test "returns an error :script_evaluation_error for a bad request" do
@@ -14,6 +14,15 @@ defmodule Gremlex.ClientTests do
       assert result == :error
       assert response == :script_evaluation_error
       assert error_message != ""
+    end
+
+    test "allows you to create a new vertex" do
+      {result, response} = g() |> add_v("person") |> property("name", "jasper") |> query
+      assert Enum.count(response) == 1
+      assert result == :ok
+      [vertex] = response
+      assert vertex.label == "person"
+      assert vertex.properties == %{name: ["jasper"]}
     end
   end
 end
