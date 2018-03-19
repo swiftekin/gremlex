@@ -26,11 +26,10 @@ defmodule Gremlex.ClientTests do
     end
 
     test "returns empty list when there is no content retrieved" do
-      {result, response} =
+      {_, response} =
         g() |> v() |> has_label("person") |> has("doesntExist", "doesntExist") |> query
 
-      IO.inspect(response)
-      assert(response = [])
+      assert(response == [])
     end
   end
 end
