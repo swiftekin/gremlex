@@ -73,6 +73,9 @@ defmodule Gremlex.Client do
           200 ->
             {:ok, acc ++ result}
 
+          204 ->
+            {:ok, []}
+
           206 ->
             recv(socket, acc ++ result)
 
