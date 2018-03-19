@@ -24,5 +24,12 @@ defmodule Gremlex.ClientTests do
       assert vertex.label == "person"
       assert vertex.properties == %{name: ["jasper"]}
     end
+
+    test "returns empty list when there is no content retrieved" do
+      {_, response} =
+        g() |> v() |> has_label("person") |> has("doesntExist", "doesntExist") |> query
+
+      assert(response == [])
+    end
   end
 end
