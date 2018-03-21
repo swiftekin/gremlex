@@ -77,8 +77,14 @@ defmodule Gremlex.GraphTests do
 
   describe "v/2" do
     test "adds a V function for an id to the queue" do
-      actual_graph = g() |> v("foo")
-      expected_graph = Queue.in({"V", ["foo"]}, Queue.new())
+      actual_graph = g() |> v(1)
+      expected_graph = Queue.in({"V", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "adds a V function when given a vertex to the queue" do
+      actual_graph = g() |> v(%Vertex{id: 1, label: "foo"})
+      expected_graph = Queue.in({"V", [1]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end

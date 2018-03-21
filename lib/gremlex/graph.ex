@@ -88,12 +88,17 @@ defmodule Gremlex.Graph do
     %Gremlex.Vertex{id: id, label: ""}
   end
 
+  @spec v(Gremlex.Graph.t(), Gremlex.Vertex.t()) :: Gremlex.Graph.t()
+  def v(graph, %Gremlex.Vertex{id: id} = vertex) do
+    enqueue(graph, "V", [id])
+  end
+
   @doc """
   Appends values the `V` command allowing you to select a vertex.
   Returns a graph to allow chaining.
   """
   @spec v(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
-  def v(graph, id) do
+  def v(graph, id) when is_number(id) do
     enqueue(graph, "V", [id])
   end
 
