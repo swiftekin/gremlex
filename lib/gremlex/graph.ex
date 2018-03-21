@@ -89,7 +89,7 @@ defmodule Gremlex.Graph do
   end
 
   @spec v(Gremlex.Graph.t(), Gremlex.Vertex.t()) :: Gremlex.Graph.t()
-  def v(graph, %Gremlex.Vertex{id: id} = vertex) do
+  def v(graph, %Gremlex.Vertex{id: id}) do
     enqueue(graph, "V", [id])
   end
 
