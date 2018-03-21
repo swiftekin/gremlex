@@ -97,6 +97,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "out_e/1" do
+    test "adds an outE function to the queue" do
+      actual_graph = g() |> out_e()
+      expected_graph = Queue.in({"outE", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "out/1" do
     test "adds an out function to the queue" do
       actual_graph = g() |> out("foo")

@@ -107,6 +107,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "outE", [edge])
   end
 
+  @spec out_e(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def out_e(graph) do
+    enqueue(graph, "outE", [])
+  end
+
   @spec out(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def out(graph, edge) do
     enqueue(graph, "out", [edge])
