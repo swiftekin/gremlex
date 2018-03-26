@@ -122,6 +122,21 @@ defmodule Gremlex.Graph do
     enqueue(graph, "inV", [])
   end
 
+  @spec out_v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def out_v(graph) do
+    enqueue(graph, "outV", [])
+  end
+
+  @spec both_v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def both_v(graph) do
+    enqueue(graph, "bothV", [])
+  end
+
+  @spec dedup(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def dedup(graph) do
+    enqueue(graph, "dedup", [])
+  end
+
   @spec to(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def to(graph, target) do
     enqueue(graph, "to", [target])

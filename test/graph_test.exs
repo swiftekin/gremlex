@@ -121,6 +121,30 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "out_v/1" do
+    test "adds an outV function to the queue" do
+      actual_graph = g() |> out_v()
+      expected_graph = Queue.in({"outV", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "both_v/1" do
+    test "adds an bothV function to the queue" do
+      actual_graph = g() |> both_v()
+      expected_graph = Queue.in({"bothV", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "dedup/1" do
+    test "adds an dedup function to the queue" do
+      actual_graph = g() |> dedup()
+      expected_graph = Queue.in({"dedup", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "to/1" do
     test "adds a to function to the queue" do
       actual_graph = g() |> to(1)
