@@ -147,6 +147,41 @@ defmodule Gremlex.Graph do
     enqueue(graph, "to", [target])
   end
 
+  @spec has_next(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def has_next(graph) do
+    enqueue(graph, "hasNext", [])
+  end
+
+  @spec next(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def next(graph) do
+    enqueue(graph, "next", [])
+  end
+
+  @spec next(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
+  def next(graph, numberOfResults) do
+    enqueue(graph, "next", [numberOfResults])
+  end
+
+  @spec try_next(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def try_next(graph) do
+    enqueue(graph, "tryNext", [])
+  end
+
+  @spec to_list(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def to_list(graph) do
+    enqueue(graph, "toList", [])
+  end
+
+  @spec to_set(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def to_set(graph) do
+    enqueue(graph, "toSet", [])
+  end
+
+  @spec to_bulk_set(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def to_bulk_set(graph) do
+    enqueue(graph, "toBulkSet", [])
+  end
+
   defp enqueue(graph, op, args) do
     Queue.in({op, args}, graph)
   end
