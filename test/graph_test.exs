@@ -153,10 +153,66 @@ defmodule Gremlex.GraphTests do
     end
   end
 
-  describe "to/1" do
+  describe "to/2" do
     test "adds a to function to the queue" do
       actual_graph = g() |> to(1)
       expected_graph = Queue.in({"to", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "has_next/1" do
+    test "adds a hasNext function to the queue" do
+      actual_graph = g() |> has_next()
+      expected_graph = Queue.in({"hasNext", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "next/1" do
+    test "adds a next function to the queue" do
+      actual_graph = g() |> next()
+      expected_graph = Queue.in({"next", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "next/2" do
+    test "adds a next function to the queue" do
+      actual_graph = g() |> next(2)
+      expected_graph = Queue.in({"next", [2]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "try_next/1" do
+    test "adds a tryNext function to the queue" do
+      actual_graph = g() |> try_next()
+      expected_graph = Queue.in({"tryNext", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "to_list/1" do
+    test "adds a toList function to the queue" do
+      actual_graph = g() |> to_list()
+      expected_graph = Queue.in({"toList", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "to_set/1" do
+    test "adds a toSet function to the queue" do
+      actual_graph = g() |> to_set()
+      expected_graph = Queue.in({"toSet", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "to_bulk_set/1" do
+    test "adds a toBulkSet function to the queue" do
+      actual_graph = g() |> to_bulk_set()
+      expected_graph = Queue.in({"toBulkSet", []}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
