@@ -182,6 +182,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "toBulkSet", [])
   end
 
+  @spec drop(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def drop(graph) do
+    enqueue(graph, "drop", [])
+  end
+
+  @spec iterate(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def iterate(graph) do
+    enqueue(graph, "iterate", [])
+  end
+
   defp enqueue(graph, op, args) do
     Queue.in({op, args}, graph)
   end
