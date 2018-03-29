@@ -217,6 +217,22 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "drop/1" do
+    test "adds a drop function to the queue" do
+      actual_graph = g() |> drop()
+      expected_graph = Queue.in({"drop", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "iterate/1" do
+    test "adds a iterate function to the queue" do
+      actual_graph = g() |> iterate()
+      expected_graph = Queue.in({"iterate", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "encode/1" do
     test "compiles queue into a query" do
       graph =
