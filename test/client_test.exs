@@ -25,6 +25,27 @@ defmodule Gremlex.ClientTests do
       assert vertex.properties == %{name: ["jasper"]}
     end
 
+    test "allows you to create a new vertex without a property" do
+      {result, response} = g() |> add_v("person") |> query
+      assert Enum.count(response) == 1
+      assert result == :ok
+      [vertex] = response
+      assert vertex.label == "person"
+    end
+
+    test "allows you to create a relationship between two vertices" do
+      {result, response} = g() |> v(0) |> add_e("edge") |> to(%Gremlex.Vertex{id: 1, label: nil}) |> query
+      assert result == :ok
+      [edge] = response
+      assert edge.label == "edge"
+    end
+
+    test "allows you to get all edges" do
+      {result, response} = g() |> e() |> query
+      assert result == :ok
+      assert Enum.count(response) > 0
+    end
+
     test "returns empty list when there is no content retrieved" do
       {_, response} =
         g() |> v() |> has_label("person") |> has("doesntExist", "doesntExist") |> query

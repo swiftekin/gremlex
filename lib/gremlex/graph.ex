@@ -202,6 +202,20 @@ defmodule Gremlex.Graph do
   end
 
   @doc """
+  Appends values the `E` command allowing you to select an edge.
+  Returns a graph to allow chaining.
+  """
+  @spec e(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def e(graph) do
+    enqueue(graph, "E", [])
+  end
+
+  @spec e(Gremlex.Graph.t(), number) :: Gremlex.Graph.t()
+  def e(graph, id) when is_number(id) do
+    enqueue(graph, "E", [id])
+  end
+
+  @doc """
   Compiles a graph into the Gremlin query.
   """
   @spec encode(Gremlex.Graph.t()) :: String.t()

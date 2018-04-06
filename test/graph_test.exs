@@ -270,4 +270,20 @@ defmodule Gremlex.GraphTests do
       assert actual_query == expected_query
     end
   end
+
+  describe "e/1" do
+    test "adds an E function to the queue" do
+      actual_graph = g() |> e()
+      expected_graph = Queue.in({"E", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2" do
+    test "adds an E function to the queue which accepts an id" do
+      actual_graph = g() |> e(1)
+      expected_graph = Queue.in({"E", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
 end
