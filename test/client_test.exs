@@ -47,7 +47,12 @@ defmodule Gremlex.ClientTests do
       assert result == :ok
       case response do
         [] ->
-          assert True
+          {res, edges} = g()
+            |> v(0)
+            |> add_e("edge_2_electric_booglaoo")
+            |> to(%Gremlex.Vertex{id: 1, properties: nil, label: "no"})
+            |> query
+          assert Enum.count(edges) > 0
         edges ->
           assert Enum.count(edges) > 0
       end
