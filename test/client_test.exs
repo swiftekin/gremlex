@@ -47,7 +47,7 @@ defmodule Gremlex.ClientTests do
       assert result == :ok
       case response do
         [] ->
-          {res, edges} = g()
+          {_res, edges} = g()
             |> v(0)
             |> add_e("edge_2_electric_booglaoo")
             |> to(%Gremlex.Vertex{id: 1, properties: nil, label: "no"})
