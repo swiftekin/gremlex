@@ -113,6 +113,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "in_/1" do
+    test "adds an in function to the queue" do
+      actual_graph = g() |> in_("foo")
+      expected_graph = Queue.in({"in", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "or_/1" do
     test "adds an or function to the queue" do
       actual_graph = g() |> or_()
