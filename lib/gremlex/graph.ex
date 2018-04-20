@@ -253,7 +253,7 @@ defmodule Gremlex.Graph do
           "#{arg}"
 
         s ->
-          "'#{s}'"
+          "'''#{s}'''"
       end)
       |> Enum.join(", ")
 
