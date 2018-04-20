@@ -230,6 +230,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "E", [id])
   end
 
+  @spec escape_quotes(String.t()) :: String.t()
+  defp escape_quotes(string) do
+    String.replace(string, "'", "\\'")
+  end
+
   @doc """
   Compiles a graph into the Gremlin query.
   """
@@ -246,14 +251,14 @@ defmodule Gremlex.Graph do
     args =
       args
       |> Enum.map(fn
-        %Gremlex.Vertex{id: id} ->
+        %Gremlex.Vertex{id: id} when is_number(id) ->
           "V(#{id})"
 
         arg when is_number(arg) ->
           "#{arg}"
 
         s ->
-          "'''#{s}'''"
+          "'''#{escape_quotes(s)}'''"
       end)
       |> Enum.join(", ")
 
