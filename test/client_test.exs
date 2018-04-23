@@ -25,6 +25,40 @@ defmodule Gremlex.ClientTests do
       assert vertex.properties == %{name: ["jasper"]}
     end
 
+    test "allows you to create a new vertex with multiline property" do
+      {result, response} =
+        g()
+        |> add_v("person")
+        |> property("name", "jasper")
+        |> property("address", "23480 Park Sorrento, Suite 100\nCalabasas, CA 91302")
+        |> query
+
+      assert Enum.count(response) == 1
+      assert result == :ok
+      [vertex] = response
+      assert vertex.label == "person"
+
+      assert vertex.properties ==
+               %{
+                 name: ["jasper"],
+                 address: ["23480 Park Sorrento, Suite 100\nCalabasas, CA 91302"]
+               }
+    end
+
+    test "does not allows injections" do
+      {result, response} =
+        g()
+        |> add_v("person")
+        |> property("name", "jasper''').property('oops', '''bummer")
+        |> query
+
+      assert Enum.count(response) == 1
+      assert result == :ok
+      [vertex] = response
+      assert vertex.label == "person"
+      assert vertex.properties == %{name: ["jasper''').property('oops', '''bummer"]}
+    end
+
     test "allows you to create a new vertex without a property" do
       {result, response} = g() |> add_v("person") |> query
       assert Enum.count(response) == 1
@@ -45,14 +79,18 @@ defmodule Gremlex.ClientTests do
     test "allows you to get all edges" do
       {result, response} = g() |> e() |> query
       assert result == :ok
+
       case response do
         [] ->
-          {_res, edges} = g()
+          {_res, edges} =
+            g()
             |> v(0)
             |> add_e("edge_2_electric_booglaoo")
             |> to(%Gremlex.Vertex{id: 1, properties: nil, label: "no"})
             |> query
+
           assert Enum.count(edges) > 0
+
         edges ->
           assert Enum.count(edges) > 0
       end
