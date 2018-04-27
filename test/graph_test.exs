@@ -293,6 +293,17 @@ defmodule Gremlex.GraphTests do
       actual_query = encode(graph)
       assert actual_query == expected_query
     end
+
+    test "compiles queue with nil value" do
+      graph =
+        g() |> v() |> has("name", nil)
+
+      expected_query =
+        "g.V().has('''name''', null)"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+    end
   end
 
   describe "e/1" do
