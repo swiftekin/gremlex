@@ -17,9 +17,13 @@ defmodule Gremlex.Vertex do
   end
 
   def from_response(%{"id" => json_id, "label" => label} = result) do
-    %{"@type" => id_type, "@value" => id_value} = json_id
-
-    id = Deserializer.deserialize(id_type, id_value)
+    id =
+      case json_id do
+        %{"@type" => id_type, "@value" => id_value} ->
+          Deserializer.deserialize(id_type, id_value)
+        id ->
+	  id
+      end
     properties = Map.get(result, "properties", %{})
 
     vertex = %Vertex{id: id, label: label}

@@ -34,18 +34,18 @@ defmodule Gremlex.Edge do
 
   def from_response(value) do
     %{
-      "id" => %{"@type" => id_type, "@value" => id_value},
-      "inV" => %{"@type" => in_v_id_type, "@value" => in_v_id_value},
+      "id" => edge_id,
+      "inV" => in_v,
       "inVLabel" => in_v_label,
       "label" => label,
-      "outV" => %{"@type" => out_v_id_type, "@value" => out_v_id_value},
+      "outV" => out_v,
       "outVLabel" => out_v_label
     } = value
 
     json_properties = Map.get(value, "properties", %{})
-    id = Deserializer.deserialize(id_type, id_value)
-    in_v_id = Deserializer.deserialize(in_v_id_type, in_v_id_value)
-    out_v_id = Deserializer.deserialize(out_v_id_type, out_v_id_value)
+    id = Deserializer.deserialize(edge_id)
+    in_v_id = Deserializer.deserialize(in_v)
+    out_v_id = Deserializer.deserialize(out_v)
 
     properties =
       Enum.reduce(json_properties, %{}, fn {key, prop_value}, acc ->
