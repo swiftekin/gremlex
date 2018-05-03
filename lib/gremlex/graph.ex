@@ -98,7 +98,7 @@ defmodule Gremlex.Graph do
   Returns a graph to allow chaining.
   """
   @spec v(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
-  def v(graph, id) when is_number(id) do
+  def v(graph, id) when is_number(id) or is_binary(id) do
     enqueue(graph, "V", [id])
   end
 
