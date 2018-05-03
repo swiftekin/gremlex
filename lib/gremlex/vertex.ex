@@ -17,8 +17,7 @@ defmodule Gremlex.Vertex do
   end
 
   def from_response(%{"id" => json_id, "label" => label} = result) do
-    IO.inspect json_id, label: "json_id"
-    id = 
+    id =
       case json_id do
         %{"@type" => id_type, "@value" => id_value} ->
           Deserializer.deserialize(id_type, id_value)

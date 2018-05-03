@@ -26,11 +26,12 @@ defmodule Gremlex.ClientTests do
     end
 
     test "allows you to create a new vertex with multiline property" do
+      address = "23480 Park Sorrento, Suite 100 Calabasas, CA 91302"
       {result, response} =
         g()
         |> add_v("person")
         |> property("name", "jasper")
-        |> property("address", "23480 Park Sorrento, Suite 100\nCalabasas, CA 91302")
+        |> property("address", address)
         |> query
 
       assert Enum.count(response) == 1
@@ -41,7 +42,7 @@ defmodule Gremlex.ClientTests do
       assert vertex.properties ==
                %{
                  name: ["jasper"],
-                 address: ["23480 Park Sorrento, Suite 100\nCalabasas, CA 91302"]
+                 address: [address]
                }
     end
 

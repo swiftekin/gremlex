@@ -4,7 +4,7 @@ defmodule Gremlex.Deserializer do
   """
   alias Gremlex.{Edge, Vertex, VertexProperty}
 
-  def deserialize(%{"result" => result} = response) do
+  def deserialize(%{"result" => result}) do
     case result["data"] do
       nil ->
         nil

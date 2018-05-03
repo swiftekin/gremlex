@@ -33,7 +33,6 @@ defmodule Gremlex.Edge do
   end
 
   def from_response(value) do
-    IO.inspect value, label: "edge_value"
     %{
       "id" => edge_id,
       "inV" => in_v,
