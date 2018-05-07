@@ -6,9 +6,20 @@ defmodule Gremlex.Request do
   @enforce_keys [:op, :processor, :requestId, :args]
   defstruct [:op, :processor, :requestId, :args]
 
-  def new(query) do
-    payload = Graph.encode(query)
-    args = %{gremlin: payload, language: "gremlin-groovy"}
+  @doc """
+  Accepts plain query and returns a Request.
+  """
+  @spec new(String.t()) :: Request
+  def new(query) when is_binary(query) do
+    args = %{gremlin: query, language: "gremlin-groovy"}
     %Gremlex.Request{requestId: UUID.uuid4(), args: args, op: @op, processor: @processor}
+  end
+
+  @doc """
+  Accepts a graph and returns a Request.
+  """
+  @spec new(Gremlex.Graph.t()) :: Request
+  def new(query) do
+    new(Graph.encode(query))
   end
 end
