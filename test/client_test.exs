@@ -103,5 +103,14 @@ defmodule Gremlex.ClientTests do
 
       assert(response == [])
     end
+
+    test "allow to execute plain query" do
+      {result, response} = query("g.addV('person').property('name', 'jasper')")
+      assert Enum.count(response) == 1
+      assert result == :ok
+      [vertex] = response
+      assert vertex.label == "person"
+      assert vertex.properties == %{name: ["jasper"]}
+    end
   end
 end
