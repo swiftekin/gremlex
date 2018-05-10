@@ -4,9 +4,7 @@ defmodule Gremlex.Deserializer do
   """
   alias Gremlex.{Edge, Vertex, VertexProperty}
 
-  def deserialize(response) do
-    %{"result" => result} = response
-
+  def deserialize(%{"result" => result}) do
     case result["data"] do
       nil ->
         nil
@@ -15,6 +13,12 @@ defmodule Gremlex.Deserializer do
         deserialize(type, value)
     end
   end
+
+  def deserialize(%{"@type" => type, "@value" => value}) do
+    deserialize(type, value)
+  end
+
+  def deserialize(val), do: val
 
   def deserialize("g:List", value) do
     Enum.map(value, fn

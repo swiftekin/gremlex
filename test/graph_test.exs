@@ -272,7 +272,7 @@ defmodule Gremlex.GraphTests do
         |> values("name")
 
       expected_query =
-        "g.V().hasLabel('''Intent''').has('''name''', '''request.group''').out('''sedan''').values('''name''')"
+        "g.V().hasLabel('Intent').has('name', 'request.group').out('sedan').values('name')"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
@@ -288,7 +288,7 @@ defmodule Gremlex.GraphTests do
 
     test "compiles query with a vertex" do
       graph = g() |> v(1) |> add_e("foo") |> to(v(2))
-      expected_query = "g.V(1).addE('''foo''').to(V(2))"
+      expected_query = "g.V(1).addE('foo').to(V(2))"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
