@@ -230,11 +230,6 @@ defmodule Gremlex.Graph do
     enqueue(graph, "E", [id])
   end
 
-  @spec escape_quotes(String.t()) :: String.t()
-  defp escape_quotes(string) do
-    String.replace(string, "'", "\\'")
-  end
-
   @doc """
   Compiles a graph into the Gremlin query.
   """
