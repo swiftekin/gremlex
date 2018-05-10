@@ -46,20 +46,6 @@ defmodule Gremlex.ClientTests do
                }
     end
 
-    test "does not allows injections" do
-      {result, response} =
-        g()
-        |> add_v("person")
-        |> property("name", "jasper''').property('oops', '''bummer")
-        |> query
-
-      assert Enum.count(response) == 1
-      assert result == :ok
-      [vertex] = response
-      assert vertex.label == "person"
-      assert vertex.properties == %{name: ["jasper''').property('oops', '''bummer"]}
-    end
-
     test "allows you to create a new vertex without a property" do
       {result, response} = g() |> add_v("person") |> query
       assert Enum.count(response) == 1
