@@ -36,7 +36,7 @@ defmodule Gremlex.Client do
   @doc """
   Accepts a graph which it converts into a query and queries the database.
   """
-  @spec query(Gremlex.Graph.t()) :: Response
+  @spec query(Gremlex.Graph.t() | String.t()) :: Response
   def query(query) do
     payload =
       query
