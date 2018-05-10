@@ -299,7 +299,7 @@ defmodule Gremlex.GraphTests do
         g() |> v() |> has("name", nil)
 
       expected_query =
-        "g.V().has('''name''', null)"
+        "g.V().has('name', null)"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
