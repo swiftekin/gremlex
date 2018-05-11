@@ -246,10 +246,13 @@ defmodule Gremlex.Graph do
     args =
       args
       |> Enum.map(fn
-        %Gremlex.Vertex{id: id} when is_number(id)->
+        nil ->
+          "null"
+
+        %Gremlex.Vertex{id: id} when is_number(id) ->
           "V(#{id})"
 
-        %Gremlex.Vertex{id: id} when is_binary(id)->
+        %Gremlex.Vertex{id: id} when is_binary(id) ->
           "V('#{id}')"
 
         arg when is_number(arg) ->
