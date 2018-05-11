@@ -98,7 +98,7 @@ defmodule Gremlex.Graph do
   Returns a graph to allow chaining.
   """
   @spec v(Gremlex.Graph.t(), number()) :: Gremlex.Graph.t()
-  def v(graph, id) when is_number(id) do
+  def v(graph, id) when is_number(id) or is_binary(id) do
     enqueue(graph, "V", [id])
   end
 
@@ -230,11 +230,6 @@ defmodule Gremlex.Graph do
     enqueue(graph, "E", [id])
   end
 
-  @spec escape_quotes(String.t()) :: String.t()
-  defp escape_quotes(string) do
-    String.replace(string, "'", "\\'")
-  end
-
   @doc """
   Compiles a graph into the Gremlin query.
   """
@@ -257,11 +252,14 @@ defmodule Gremlex.Graph do
         %Gremlex.Vertex{id: id} when is_number(id) ->
           "V(#{id})"
 
+        %Gremlex.Vertex{id: id} when is_binary(id) ->
+          "V('#{id}')"
+
         arg when is_number(arg) ->
           "#{arg}"
 
         s ->
-          "'#{escape_quotes(s)}'"
+          "'#{s}'"
       end)
       |> Enum.join(", ")
 
