@@ -152,6 +152,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "outV", [])
   end
 
+  @spec both(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def both(graph) do
+    enqueue(graph, "both", [])
+  end
+
+  @spec both_e(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def both_e(graph) do
+    enqueue(graph, "bothE", [])
+  end
+
   @spec both_v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def both_v(graph) do
     enqueue(graph, "bothV", [])
