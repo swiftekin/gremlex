@@ -21,8 +21,13 @@ defmodule Gremlex.Client do
 
   @spec start_link({String.t(), number(), String.t()}) :: pid()
   def start_link({host, port, path}) do
-    socket = Socket.Web.connect!(host, port, path: path)
-    GenServer.start_link(__MODULE__, socket, [])
+    case Socket.Web.connect(host, port, path: path) do
+      {:ok, socket} ->
+        GenServer.start_link(__MODULE__, socket, [])
+      error ->
+        Logger.error("Error establishing connection to server: #{inspect(error)}")
+        GenServer.start_link(__MODULE__, %{}, [])
+    end
   end
 
   @spec init(Socket.Web.t()) :: state

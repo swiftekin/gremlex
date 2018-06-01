@@ -153,6 +153,22 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "in_e/2" do
+    test "adds an inE function to the queue" do
+      actual_graph = g() |> in_e("foo")
+      expected_graph = Queue.in({"inE", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "in_e/1" do
+    test "adds an inE function to the queue" do
+      actual_graph = g() |> in_e()
+      expected_graph = Queue.in({"inE", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "in_v/1" do
     test "adds an inV function to the queue" do
       actual_graph = g() |> in_v()
@@ -169,8 +185,24 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "both/1" do
+    test "adds a both function to the queue" do
+      actual_graph = g() |> both()
+      expected_graph = Queue.in({"both", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "both_e/1" do
+    test "adds a bothE function to the queue" do
+      actual_graph = g() |> both_e()
+      expected_graph = Queue.in({"bothE", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "both_v/1" do
-    test "adds an bothV function to the queue" do
+    test "adds a bothV function to the queue" do
       actual_graph = g() |> both_v()
       expected_graph = Queue.in({"bothV", []}, Queue.new())
       assert actual_graph == expected_graph
