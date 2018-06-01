@@ -247,7 +247,7 @@ defmodule Gremlex.Graph do
       args
       |> Enum.map(fn
         nil ->
-          "null"
+          "none"
 
         %Gremlex.Vertex{id: id} when is_number(id) ->
           "V(#{id})"
