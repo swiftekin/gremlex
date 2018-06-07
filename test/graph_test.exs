@@ -51,6 +51,38 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "add_namespace/1" do
+    test "adds a property function with the default namespace value to the queue" do
+      actual_graph = g() |> Graph.add_namespace()
+      expected_graph = Queue.in({"property", ["namespace", "gremlex"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "add_namespace/2" do
+    test "adds a property function namespace value to the queue" do
+      actual_graph = g() |> Graph.add_namespace("bar")
+      expected_graph = Queue.in({"property", ["namespace", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "has_namespace/1" do
+    test "adds a has function to the queue with the default namespace" do
+      actual_graph = g() |> Graph.has_namespace()
+      expected_graph = Queue.in({"has", ["namespace", "gremlex"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "has_namespace/2" do
+    test "has a property function to the queue with the namespace" do
+      actual_graph = g() |> Graph.has_namespace("bar")
+      expected_graph = Queue.in({"has", ["namespace", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "values/2" do
     test "adds a value function the queue" do
       actual_graph = g() |> values("foo")

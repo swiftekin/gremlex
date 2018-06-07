@@ -54,6 +54,13 @@ defmodule Gremlex.ClientTests do
       assert vertex.label == "person"
     end
 
+    test "allows you to create a relatnew vertex with a namespace" do
+      {_, [s]} = g() |> add_v("foo") |> add_namespace() |> query()
+      {_, [t]} = g() |> add_v("bar") |> add_namespace("baz") |> query()
+      assert s.properties.namespace == ["gremlex"]
+      assert t.properties.namespace == ["baz"]
+    end
+
     test "allows you to create a relationship between two vertices" do
       {_, [s]} = g() |> add_v("foo") |> property("name", "bar") |> query()
       {_, [t]} = g() |> add_v("bar") |> property("name", "baz") |> query()

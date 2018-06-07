@@ -27,7 +27,6 @@ defmodule Gremlex.Application do
       |> parse_port()
     path = Confex.fetch_env!(:gremlex, :path)
     pool_size = Confex.fetch_env!(:gremlex, :pool_size)
-
     pool_options = [
       name: {:local, :gremlex},
       worker_module: Gremlex.Client,

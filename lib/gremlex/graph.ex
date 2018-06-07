@@ -21,6 +21,8 @@ defmodule Gremlex.Graph do
   alias :queue, as: Queue
 
   @type t :: {[], []}
+  @default_namespace_property "namespace"
+  @default_namespace "gremlex"
 
   @doc """
   Start of graph traversal. All graph operations are stored in a queue.
@@ -251,6 +253,30 @@ defmodule Gremlex.Graph do
   end
 
   @doc """
+  Adds a namespace as property
+  """
+  @spec add_namespace(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def add_namespace(graph) do
+    add_namespace(graph, namespace())
+  end
+
+  @spec add_namespace(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
+  def add_namespace(graph, ns) do
+    graph |> property(namespace_property(), ns)
+  end
+
+  @spec has_namespace(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def has_namespace(graph) do
+    has_namespace(graph, namespace())
+  end
+
+  @spec has_namespace(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
+  def has_namespace(graph, ns) do
+    graph |> has(namespace_property(), ns)
+  end
+
+
+  @doc """
   Compiles a graph into the Gremlin query.
   """
   @spec encode(Gremlex.Graph.t()) :: String.t()
@@ -284,5 +310,13 @@ defmodule Gremlex.Graph do
       |> Enum.join(", ")
 
     encode(remainder, acc <> ".#{op}(#{args})")
+  end
+
+  defp namespace_property do
+    Confex.get_env(:gremlex, :namespace_property, @default_namespace_property)
+  end
+
+  defp namespace do
+    Confex.get_env(:gremlex, :namespace_name, @default_namespace)
   end
 end
