@@ -245,8 +245,13 @@ defmodule Gremlex.Graph do
     enqueue(graph, "E", [])
   end
 
-  @spec e(Gremlex.Graph.t(), number) :: Gremlex.Graph.t()
-  def e(graph, id) when is_number(id) do
+  @spec e(Gremlex.Graph.t(), Gremlex.Edge.t()) :: Gremlex.Graph.t()
+  def e(graph, %Gremlex.Edge{id: id}) do
+    enqueue(graph, "E", [id])
+  end
+
+  @spec e(Gremlex.Graph.t(), number | String.t()) :: Gremlex.Graph.t()
+  def e(graph, id) when is_number(id) or is_binary(id) do
     enqueue(graph, "E", [id])
   end
 
