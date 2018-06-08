@@ -140,4 +140,15 @@ defmodule Gremlex.Test.Mocks do
       "label" => "name"
     }
   end
+
+  def vertex_property_no_vertex do
+    %{
+      "id" => %{
+        "@type" => "g:Int64",
+        "@value" => 0
+      },
+      "value" => "marko",
+      "label" => "name"
+    }
+  end
 end

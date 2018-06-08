@@ -67,6 +67,39 @@ defmodule Gremlex.Graph do
     enqueue(graph, "property", [key, value])
   end
 
+    @doc """
+  Appends properties command to the traversal.
+  Returns a graph to allow chaining.
+  """
+  @spec properties(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def properties(graph, key) do
+    enqueue(graph, "properties", [key])
+  end
+
+  @spec properties(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def properties(graph) do
+    enqueue(graph, "properties", [])
+  end
+
+      @doc """
+  Appends valueMap command to the traversal.
+  Returns a graph to allow chaining.
+  """
+  @spec value_map(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def value_map(graph) do
+    enqueue(graph, "valueMap", [])
+  end
+
+  @spec value_map(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def value_map(graph, value) when is_binary(value) do
+    enqueue(graph, "valueMap", [value])
+  end
+
+  @spec value_map(Gremlex.Graph.t(), list(String.t())) :: Gremlex.Graph.t()
+  def value_map(graph, values) when is_list(values) do
+    enqueue(graph, "valueMap", values)
+  end
+
   @doc """
   Appends values command to the traversal.
   Returns a graph to allow chaining.
@@ -247,8 +280,13 @@ defmodule Gremlex.Graph do
     enqueue(graph, "E", [])
   end
 
-  @spec e(Gremlex.Graph.t(), number) :: Gremlex.Graph.t()
-  def e(graph, id) when is_number(id) do
+  @spec e(Gremlex.Graph.t(), Gremlex.Edge.t()) :: Gremlex.Graph.t()
+  def e(graph, %Gremlex.Edge{id: id}) do
+    enqueue(graph, "E", [id])
+  end
+
+  @spec e(Gremlex.Graph.t(), number | String.t()) :: Gremlex.Graph.t()
+  def e(graph, id) when is_number(id) or is_binary(id) do
     enqueue(graph, "E", [id])
   end
 

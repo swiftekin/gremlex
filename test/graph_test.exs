@@ -1,6 +1,6 @@
 defmodule Gremlex.GraphTests do
   import Gremlex.Graph
-  alias Gremlex.{Vertex, Graph}
+  alias Gremlex.{Vertex, Edge, Graph}
   use ExUnit.Case
   use ExUnitProperties
   alias :queue, as: Queue
@@ -51,34 +51,42 @@ defmodule Gremlex.GraphTests do
     end
   end
 
-  describe "add_namespace/1" do
-    test "adds a property function with the default namespace value to the queue" do
-      actual_graph = g() |> Graph.add_namespace()
-      expected_graph = Queue.in({"property", ["namespace", "gremlex"]}, Queue.new())
+  describe "properties/2" do
+    test "adds a properties function to the queue" do
+      actual_graph = g() |> Graph.properties("foo")
+      expected_graph = Queue.in({"properties", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
 
-  describe "add_namespace/2" do
-    test "adds a property function namespace value to the queue" do
-      actual_graph = g() |> Graph.add_namespace("bar")
-      expected_graph = Queue.in({"property", ["namespace", "bar"]}, Queue.new())
+  describe "properties/1" do
+    test "adds a properties function to the queue" do
+      actual_graph = g() |> Graph.properties()
+      expected_graph = Queue.in({"properties", []}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
 
-  describe "has_namespace/1" do
-    test "adds a has function to the queue with the default namespace" do
-      actual_graph = g() |> Graph.has_namespace()
-      expected_graph = Queue.in({"has", ["namespace", "gremlex"]}, Queue.new())
+  describe "value_map/1" do
+    test "adds a valueMap function to the queue" do
+      actual_graph = g() |> Graph.value_map()
+      expected_graph = Queue.in({"valueMap", []}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
 
-  describe "has_namespace/2" do
-    test "has a property function to the queue with the namespace" do
-      actual_graph = g() |> Graph.has_namespace("bar")
-      expected_graph = Queue.in({"has", ["namespace", "bar"]}, Queue.new())
+  describe "value_map/2 when value is string" do
+    test "adds a valueMap function to the queue" do
+      actual_graph = g() |> Graph.value_map("foo")
+      expected_graph = Queue.in({"valueMap", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "value_map/2 when value is a list" do
+    test "adds a valueMap function to the queue" do
+      actual_graph = g() |> Graph.value_map(["foo", "bar"])
+      expected_graph = Queue.in({"valueMap", ["foo", "bar"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -378,10 +386,48 @@ defmodule Gremlex.GraphTests do
     end
   end
 
-  describe "e/2" do
-    test "adds an E function to the queue which accepts an id" do
+  describe "e/2 with number" do
+    test "adds an E function to the queue which accepts a numeric id" do
       actual_graph = g() |> e(1)
       expected_graph = Queue.in({"E", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2 with string" do
+    test "adds an E function to the queue which accepts a string id" do
+      actual_graph = g() |> e("string-id")
+      expected_graph = Queue.in({"E", ["string-id"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2 with edge with numeric id" do
+    test "adds an E function to the queue which accepts a string id" do
+      edge = %Edge{
+        id: 123,
+        label: "someEdge",
+        in_vertex: %Vertex{id: 345, label: "inVert"},
+        out_vertex: %Vertex{id: 678, label: "outVert"},
+        properties: %{}
+      }
+      actual_graph = g() |> e(edge)
+      expected_graph = Queue.in({"E", [123]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2 with edge with string id" do
+    test "adds an E function to the queue which accepts a string id" do
+      edge = %Edge{
+        id: "edge-id",
+        label: "someEdge",
+        in_vertex: %Vertex{id: "in-v-id", label: "inVert"},
+        out_vertex: %Vertex{id: "out-v-id", label: "outVert"},
+        properties: %{}
+      }
+      actual_graph = g() |> e(edge)
+      expected_graph = Queue.in({"E", ["edge-id"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
