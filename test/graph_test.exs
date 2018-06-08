@@ -1,6 +1,6 @@
 defmodule Gremlex.GraphTests do
   import Gremlex.Graph
-  alias Gremlex.{Vertex, Graph}
+  alias Gremlex.{Vertex, Edge, Graph}
   use ExUnit.Case
   use ExUnitProperties
   alias :queue, as: Queue
@@ -386,10 +386,48 @@ defmodule Gremlex.GraphTests do
     end
   end
 
-  describe "e/2" do
-    test "adds an E function to the queue which accepts an id" do
+  describe "e/2 with number" do
+    test "adds an E function to the queue which accepts a numeric id" do
       actual_graph = g() |> e(1)
       expected_graph = Queue.in({"E", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2 with string" do
+    test "adds an E function to the queue which accepts a string id" do
+      actual_graph = g() |> e("string-id")
+      expected_graph = Queue.in({"E", ["string-id"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2 with edge with numeric id" do
+    test "adds an E function to the queue which accepts a string id" do
+      edge = %Edge{
+        id: 123,
+        label: "someEdge",
+        in_vertex: %Vertex{id: 345, label: "inVert"},
+        out_vertex: %Vertex{id: 678, label: "outVert"},
+        properties: %{}
+      }
+      actual_graph = g() |> e(edge)
+      expected_graph = Queue.in({"E", [123]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "e/2 with edge with string id" do
+    test "adds an E function to the queue which accepts a string id" do
+      edge = %Edge{
+        id: "edge-id",
+        label: "someEdge",
+        in_vertex: %Vertex{id: "in-v-id", label: "inVert"},
+        out_vertex: %Vertex{id: "out-v-id", label: "outVert"},
+        properties: %{}
+      }
+      actual_graph = g() |> e(edge)
+      expected_graph = Queue.in({"E", ["edge-id"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
