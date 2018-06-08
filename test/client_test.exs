@@ -54,7 +54,7 @@ defmodule Gremlex.ClientTests do
       assert vertex.label == "person"
     end
 
-    test "allows you to create a relatnew vertex with a namespace" do
+    test "allows you to create a new vertex with a namespace" do
       {_, [s]} = g() |> add_v("foo") |> add_namespace() |> query()
       {_, [t]} = g() |> add_v("bar") |> add_namespace("baz") |> query()
       assert s.properties.namespace == ["gremlex"]
