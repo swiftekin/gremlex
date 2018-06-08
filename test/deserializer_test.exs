@@ -110,5 +110,12 @@ defmodule Grmelex.DeserializerTests do
 
       assert deserialize("g:VertexProperty", vertex_property) == expected_property
     end
+
+    test "should deserialize vertex properties without a vertex" do
+      vertex_property = Mocks.vertex_property_no_vertex()
+      expected_property = %VertexProperty{id: 0, value: "marko", label: "name", vertex: nil}
+
+      assert deserialize("g:VertexProperty", vertex_property) == expected_property
+    end
   end
 end
