@@ -51,6 +51,46 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "properties/2" do
+    test "adds a properties function to the queue" do
+      actual_graph = g() |> Graph.properties("foo")
+      expected_graph = Queue.in({"properties", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "properties/1" do
+    test "adds a properties function to the queue" do
+      actual_graph = g() |> Graph.properties()
+      expected_graph = Queue.in({"properties", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "value_map/1" do
+    test "adds a valueMap function to the queue" do
+      actual_graph = g() |> Graph.value_map()
+      expected_graph = Queue.in({"valueMap", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "value_map/2 when value is string" do
+    test "adds a valueMap function to the queue" do
+      actual_graph = g() |> Graph.value_map("foo")
+      expected_graph = Queue.in({"valueMap", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "value_map/2 when value is a list" do
+    test "adds a valueMap function to the queue" do
+      actual_graph = g() |> Graph.value_map(["foo", "bar"])
+      expected_graph = Queue.in({"valueMap", ["foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "values/2" do
     test "adds a value function the queue" do
       actual_graph = g() |> values("foo")

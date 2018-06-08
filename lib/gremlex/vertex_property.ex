@@ -5,7 +5,7 @@ defmodule Gremlex.VertexProperty do
           value: any(),
           vertex: number()
         }
-  @enforce_keys [:label, :id, :value, :vertex]
+  @enforce_keys [:label, :id, :value]
   @derive [Poison.Encoder]
   defstruct [:label, :id, :value, :vertex]
 
@@ -13,5 +13,10 @@ defmodule Gremlex.VertexProperty do
     %{"@value" => id} = json_id
     %{"@value" => vertex_id} = vertex
     %Gremlex.VertexProperty{label: label, id: id, vertex: vertex_id, value: value}
+  end
+
+  def from_response(%{"id" => id, "label" => label, "value" => value}) do
+    %{"@value" => property_id} = id
+    %Gremlex.VertexProperty{label: label, id: property_id, value: value}
   end
 end
