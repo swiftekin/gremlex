@@ -67,6 +67,21 @@ defmodule Gremlex.Graph do
     enqueue(graph, "property", [key, value])
   end
 
+  @spec property(Gremlex.Graph.t(), atom(), String.t(), any()) :: Gremlex.Graph.t()
+  def property(graph, :single, key, value) do
+    enqueue(graph, "property", [:single, key, value])
+  end
+
+  @spec property(Gremlex.Graph.t(), atom(), String.t(), any()) :: Gremlex.Graph.t()
+  def property(graph, :list, key, value) do
+    enqueue(graph, "property", [:list, key, value])
+  end
+
+  @spec property(Gremlex.Graph.t(), atom(), String.t(), any()) :: Gremlex.Graph.t()
+  def property(graph, :set, key, value) do
+    enqueue(graph, "property", [:set, key, value])
+  end
+
     @doc """
   Appends properties command to the traversal.
   Returns a graph to allow chaining.
@@ -339,7 +354,7 @@ defmodule Gremlex.Graph do
         %Gremlex.Vertex{id: id} when is_binary(id) ->
           "V('#{id}')"
 
-        arg when is_number(arg) ->
+        arg when is_number(arg) or is_atom(arg) ->
           "#{arg}"
 
         s ->
