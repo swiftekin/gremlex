@@ -67,17 +67,17 @@ defmodule Gremlex.Graph do
     enqueue(graph, "property", [key, value])
   end
 
-  @spec property(atom(), Gremlex.Graph.t(), String.t(), any()) :: Gremlex.Graph.t()
+  @spec property(Gremlex.Graph.t(), atom(), String.t(), any()) :: Gremlex.Graph.t()
   def property(graph, :single, key, value) do
     enqueue(graph, "property", [:single, key, value])
   end
 
-  @spec property(atom(), Gremlex.Graph.t(), String.t(), any()) :: Gremlex.Graph.t()
+  @spec property(Gremlex.Graph.t(), atom(), String.t(), any()) :: Gremlex.Graph.t()
   def property(graph, :list, key, value) do
     enqueue(graph, "property", [:list, key, value])
   end
 
-  @spec property(atom(), Gremlex.Graph.t(), String.t(), any()) :: Gremlex.Graph.t()
+  @spec property(Gremlex.Graph.t(), atom(), String.t(), any()) :: Gremlex.Graph.t()
   def property(graph, :set, key, value) do
     enqueue(graph, "property", [:set, key, value])
   end
