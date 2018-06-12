@@ -83,6 +83,26 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "property/4" do
+    test "adds a property function to the queue as single" do
+      actual_graph = g() |> Graph.property(:single, "foo", "bar")
+      expected_graph = Queue.in({"property", [:single, "foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "adds a property function to the queue as list" do
+      actual_graph = g() |> Graph.property(:list, "foo", "bar")
+      expected_graph = Queue.in({"property", [:list, "foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "adds a property function to the queue as set" do
+      actual_graph = g() |> Graph.property(:set, "foo", "bar")
+      expected_graph = Queue.in({"property", [:set, "foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "properties/2" do
     test "adds a properties function to the queue" do
       actual_graph = g() |> Graph.properties("foo")
