@@ -4,11 +4,11 @@ defmodule Gremlex.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   defp parse_port(port) when is_number(port), do: port
-
   defp parse_port(""), do: 8182
-
+  defp parse_port(:not_set), do: :not_set
   defp parse_port(port_string) when is_binary(port_string) do
     case Integer.parse(port_string) do
       {port, ""} ->
@@ -18,15 +18,19 @@ defmodule Gremlex.Application do
     end
   end
 
-  def start(_type, _args) do
-    # List all child processes to be supervised
-    host = Confex.fetch_env!(:gremlex, :host)
-    port =
-      :gremlex
-      |> Confex.fetch_env!(:port)
-      |> parse_port()
-    path = Confex.fetch_env!(:gremlex, :path)
-    pool_size = Confex.fetch_env!(:gremlex, :pool_size)
+  defp get_env(param) do
+    case Confex.fetch_env(:gremlex, param) do
+      {:ok, value} -> value
+      :error -> :not_set
+    end
+  end
+
+  defp build_app_worker(:not_set, :not_set, :not_set, :not_set) do
+    Logger.warn("Gremlex application will not start because of missing configuration.")
+    []
+  end
+
+  defp build_app_worker(host, port, path, pool_size) do
     pool_options = [
       name: {:local, :gremlex},
       worker_module: Gremlex.Client,
@@ -34,18 +38,17 @@ defmodule Gremlex.Application do
       max_overflow: 10
     ]
 
-    children = [
-      :poolboy.child_spec(:gremlex, pool_options, {host, port, path})
-      # Starts a worker by calling: Gremlex.Worker.start_link(arg)
-      # {Gremlex.Worker, arg},
-    ]
+    [:poolboy.child_spec(:gremlex, pool_options, {host, port, path})]
+  end
 
-    # case :hackney_pool.start_pool(:gremlex_pool, [timeout: 15000, max_connections: pool_size]) do
-    #   :ok ->
-    #     nil
-    #   :error ->
-    #     raise "Cannot create HTTP request pool"
-    # end
+  def start(_type, _args) do
+    # List all child processes to be supervised
+    host = get_env(:host)
+    port = get_env(:port) |> parse_port()
+    path = get_env(:path)
+    pool_size = get_env(:pool_size)
+
+    children = build_app_worker(host, port, path, pool_size)
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
