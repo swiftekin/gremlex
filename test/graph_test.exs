@@ -418,6 +418,14 @@ defmodule Gremlex.GraphTests do
       assert actual_query == expected_query
     end
 
+    test "escape the query correctly with an apostrophe" do
+      graph = g() |> v(1) |> add_e("foo' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('foo\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+    end
+
     test "compiles queue with nil value" do
       graph =
         g() |> v() |> has("name", nil)

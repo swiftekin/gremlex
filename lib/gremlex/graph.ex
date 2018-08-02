@@ -357,8 +357,8 @@ defmodule Gremlex.Graph do
         arg when is_number(arg) or is_atom(arg) ->
           "#{arg}"
 
-        s ->
-          "'#{s}'"
+        str ->
+          "'#{String.replace(str, "'", "\\'")}'"
       end)
       |> Enum.join(", ")
 
