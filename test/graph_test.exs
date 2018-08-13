@@ -424,6 +424,50 @@ defmodule Gremlex.GraphTests do
 
       actual_query = encode(graph)
       assert actual_query == expected_query
+
+      graph = g() |> v(1) |> add_e("o' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('o\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+
+      graph = g() |> v(1) |> add_e("' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+
+      graph = g() |> v(1) |> add_e("foo\\\\' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('foo\\\\\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+
+      graph = g() |> v(1) |> add_e("foo\\\\\\\\' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('foo\\\\\\\\\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+    end
+
+    test "do no escape already escaped apostrophe" do
+      graph = g() |> v(1) |> add_e("foo\\' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('foo\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+
+      graph = g() |> v(1) |> add_e("\\' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+
+      graph = g() |> v(1) |> add_e("\\\\' with apostrophe") |> to(v(2))
+      expected_query = "g.V(1).addE('\\\\\\' with apostrophe').to(V(2))"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
     end
 
     test "compiles queue with nil value" do

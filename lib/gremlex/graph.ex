@@ -358,11 +358,17 @@ defmodule Gremlex.Graph do
           "#{arg}"
 
         str ->
-          "'#{String.replace(str, "'", "\\'")}'"
+          "'#{escape(str)}'"
       end)
       |> Enum.join(", ")
 
     encode(remainder, acc <> ".#{op}(#{args})")
+  end
+
+  @spec escape(String.t()) :: String.t()
+  defp escape(str) do
+    # We escape single quote if it is not already escaped by an odd number of backslashes
+    String.replace(str, ~r/((\A|[^\\])(\\\\)*)'/, "\\1\\'")
   end
 
   defp namespace_property do
