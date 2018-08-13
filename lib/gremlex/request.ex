@@ -7,7 +7,7 @@ defmodule Gremlex.Request do
   defstruct [:op, :processor, :requestId, :args]
 
   @doc """
-  Accepts plain query and returns a Request.
+  Accepts plain query or a graph and returns a Request.
   """
   @spec new(String.t()) :: Request
   def new(query) when is_binary(query) do
@@ -15,9 +15,6 @@ defmodule Gremlex.Request do
     %Gremlex.Request{requestId: UUID.uuid4(), args: args, op: @op, processor: @processor}
   end
 
-  @doc """
-  Accepts a graph and returns a Request.
-  """
   @spec new(Gremlex.Graph.t()) :: Request
   def new(query) do
     new(Graph.encode(query))
