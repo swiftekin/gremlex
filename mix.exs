@@ -9,7 +9,10 @@ defmodule Gremlex.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      description: description(),
+      package: package(),
       test_coverage: [tool: ExCoveralls],
+      source_url: "https://github.com/Revmaker/gremlex",
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
@@ -42,12 +45,24 @@ defmodule Gremlex.MixProject do
       {:poolboy, "~> 1.5.1"},
       {:socket, "~> 0.3"},
       {:mix_test_watch, "~> 0.3", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:mock, "~> 0.2.0", only: :test},
       {:excoveralls, "~> 0.7", only: :test},
       {:stream_data, "~> 0.1", only: :test}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+    ]
+  end
+
+  defp description do
+    "An Elixir client for Gremlin.
+
+    Gremlex does not support all functions (yet). It is pretty early on in it's development. But you can always use raw Gremlin queries by using Client.query(\"<Insert gremlin query>\")"
+  end
+
+  defp package() do
+    [
+      name: "gremlex",
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/Revmaker/gremlex"}
     ]
   end
 end
