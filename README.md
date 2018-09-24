@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/Revmaker/gremlex.svg?branch=master)](https://travis-ci.com/Revmaker/gremlex)
+
 # Gremlex
 
 An Elixir client for [Gremlin](http://tinkerpop.apache.org/gremlin.html).
