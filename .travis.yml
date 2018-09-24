@@ -1,0 +1,16 @@
+sudo: required
+language: elixir
+elixir: '1.6'
+
+services:
+  - docker
+
+install:
+  - docker-compose -f docker-compose/docker-compose.yml build && \
+
+script:
+  - docker-compose -f docker-compose/docker-compose.yml run gremlex && \
+
+after_script:
+  - docker-compose -f docker-compose/docker-compose.yml down --remove-orphans
+  - commitlint --from master
