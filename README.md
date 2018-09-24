@@ -8,12 +8,12 @@ Gremlex does not support all functions (yet). It is pretty early on in it's deve
 
 ## Installation
 
-Add the Github repo URL to your list of dependencies in `mix.exs`:
+Install from Hex.pm:
 
 ```elixir
 def deps do
   [
-    {:gremlex, git: "https://github.com/Revmaker/gremlex.git"}
+    {:gremlex, "~> 0.1.1"}
   ]
 end
 ```
