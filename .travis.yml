@@ -1,16 +1,15 @@
 sudo: required
 language: elixir
 elixir: '1.6'
-
 services:
-  - docker
-
+- docker
 install:
-  - docker-compose -f docker-compose/docker-compose.yml build
-
+- docker-compose -f docker-compose/docker-compose.yml build
 script:
-  - docker-compose -f docker-compose/docker-compose.yml run gremlex
-
+- docker-compose -f docker-compose/docker-compose.yml run gremlex
 after_script:
-  - docker-compose -f docker-compose/docker-compose.yml down --remove-orphans
-  - commitlint --from master
+- docker-compose -f docker-compose/docker-compose.yml down --remove-orphans
+- commitlint --from master
+notifications:
+  slack:
+    secure: boCSZCaqtQ1zjFP+n77uEZVtDuO0STHc+re1jutR1OSpqnC435R9dHg0Msd+BBaHT20agXrTqBfZup08zpsH8bh3+y3jSu8ofKIRYtSfr4khC2OMc09PmF+QNhHeUfiaaWeXEJxAX4xRNeVCUsF48au49o5aOp6JKWkK84lTJIMl+KN72fF/twpQp6GNh7U5D84sB4j2X5rN6yuXzglBaGBaBfjZt8qHZGCjWQ6DB0Gh/1Vv7l4VzE0qzq5587C5o1KoWU9JNq6fIvuq3pk6d+TifAapbg2+Lhs0g7kaS4dlrE/uwxveZ711ulMw1tfaGdLP6jJzIGRy1IuAGrQNvjq0uLvJhAHPemn8z7s7C+CWADWV3otkNpOuPUTbrtDqaYk8xSzQ9I6yGhpmlQR8xXY40xnpvGZhfLAaKlEGvkJYaj45dbf1ZjlS6igQ5Ee1o/XxIGVkxtY+3vCi92gBhVUPqfjANEzNdBOSw4T8k50anh0R5OQQjqkh+OmqivTXgcQIVCuY6kvsqZH8wTCCO29QSUVgKur8bQAOhi8GATnAUOCXGOZaToeZDNkfCfLgQSWSAINHs2sP760SEcsGvA1czxrHkhma5Zi1EdS+Vr8fqmUuoGxykWpfqnFNnJRRmV0S2MFBEqoH0zI/+UmBe5i6i32uPsJ9Q+alhu4wpFY=
