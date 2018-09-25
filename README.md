@@ -1,4 +1,7 @@
+<p align="center"><img src="logo.png"></img></p>
+
 [![Build Status](https://travis-ci.com/Revmaker/gremlex.svg?branch=master)](https://travis-ci.com/Revmaker/gremlex)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Gremlex
 
