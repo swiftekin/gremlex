@@ -66,10 +66,10 @@ Graph.g()
 ```elixir
 Client.query("""
   g.V().match(
-    as("a").out("knows").as("b"),
-    as("a").out("created").as("c"),
-    as("b").out("created").as("c"),
-    as("c").in("created").count().is(2)
+    __.as("a").out("knows").as("b"),
+    __.as("a").out("created").as("c"),
+    __.as("b").out("created").as("c"),
+    __.as("c").in("created").count().is(2)
   )
   .select("c").by("name")
 """)
