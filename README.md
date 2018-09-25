@@ -2,25 +2,25 @@
 
 # Gremlex
 
-An Elixir client for [Gremlin](http://tinkerpop.apache.org/gremlin.html).
+An Elixir client for Apache TinkerPop™ aka [Gremlin](http://tinkerpop.apache.org/gremlin.html).
 
 Gremlex does not support all functions (yet). It is pretty early on in it's development. But you can always use raw Gremlin queries by using `Client.query("<Insert gremlin query>")`
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `gremlex` to your list of dependencies in `mix.exs`:
+Install from Hex.pm:
 
 ```elixir
 def deps do
   [
-    {:gremlex, "~> 0.1.0"}
+    {:gremlex, "~> 0.1.1"}
   ]
 end
 ```
 
 ## Examples
 
+#### Basic Usage
 The two main modules that you'll want to use are `Gremlex.Graph` and `Gremlex.Client`.
 
 `Gremlex.Graph` is the module that hosts all the functions needed to build a Gremlin query.
@@ -41,6 +41,38 @@ iex(3)> Graph.g() |> Graph.v() |> Client.query
      properties: %{age: [29], name: ["marko"]}
    }
  ]}
+```
+
+#### Gremlin Query to Gremlex
+This gremlin query:
+```
+g.V().has("name","marko")
+  .out("knows")
+  .out("knows")
+  .values("name")
+```
+Would translate in Gremlex to:
+```elixir
+Graph.g()
+|> Graph.v()
+|> Graph.has("name", "marko")
+|> Graph.out("knows")
+|> Graph.out("knows")
+|> Graph.values("name")
+|> Client.query
+```
+
+#### Raw Queries
+```elixir
+Client.query("""
+  g.V().match(
+    __.as("a").out("knows").as("b"),
+    __.as("a").out("created").as("c"),
+    __.as("b").out("created").as("c"),
+    __.as("c").in("created").count().is(2)
+  )
+  .select("c").by("name")
+""")
 ```
 
 ## Configuration
