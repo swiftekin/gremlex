@@ -18,6 +18,11 @@ defmodule Gremlex.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
+      ],
+      docs: [
+        main: "Gremlex", # The main page in the docs
+        logo: "logo.png",
+        extras: ["README.md"]
       ]
     ]
   end
