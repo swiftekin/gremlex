@@ -66,14 +66,14 @@ Graph.g()
 ```elixir
 Client.query("""
   g.V().match(
-  as("a").out("knows").as("b"),
-  as("a").out("created").as("c"),
-  as("b").out("created").as("c"),
-  as("c").in("created").count().is(2)).
-    select("c").by("name")
+    as("a").out("knows").as("b"),
+    as("a").out("created").as("c"),
+    as("b").out("created").as("c"),
+    as("c").in("created").count().is(2)
+  )
+  .select("c").by("name")
 """)
 ```
-
 
 ## Configuration
 You can configure Gremlex by adding the following to your `config.exs`:
