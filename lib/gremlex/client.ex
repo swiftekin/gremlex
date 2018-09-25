@@ -19,9 +19,9 @@ defmodule Gremlex.Client do
   alias Gremlex.Request
   alias Gremlex.Deserializer
 
-  @spec start_link({String.t(), number(), String.t()}) :: pid()
-  def start_link({host, port, path}) do
-    case Socket.Web.connect(host, port, path: path) do
+  @spec start_link({String.t(), number(), String.t(), boolean()}) :: pid()
+  def start_link({host, port, path, secure}) do
+    case Socket.Web.connect(host, port, path: path, secure: secure) do
       {:ok, socket} ->
         GenServer.start_link(__MODULE__, socket, [])
       error ->

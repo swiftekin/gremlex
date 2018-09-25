@@ -18,6 +18,9 @@ defmodule Gremlex.Application do
     end
   end
 
+  defp parse_secure(:not_set), do: false
+  defp parse_secure(is_secure), do: is_secure
+
   defp get_env(param) do
     case Confex.fetch_env(:gremlex, param) do
       {:ok, value} -> value
@@ -25,12 +28,12 @@ defmodule Gremlex.Application do
     end
   end
 
-  defp build_app_worker(:not_set, :not_set, :not_set, :not_set) do
+  defp build_app_worker(:not_set, :not_set, :not_set, :not_set, :not_set) do
     Logger.warn("Gremlex application will not start because of missing configuration.")
     []
   end
 
-  defp build_app_worker(host, port, path, pool_size) do
+  defp build_app_worker(host, port, path, pool_size, secure) do
     pool_options = [
       name: {:local, :gremlex},
       worker_module: Gremlex.Client,
@@ -38,7 +41,7 @@ defmodule Gremlex.Application do
       max_overflow: 10
     ]
 
-    [:poolboy.child_spec(:gremlex, pool_options, {host, port, path})]
+    [:poolboy.child_spec(:gremlex, pool_options, {host, port, path, secure})]
   end
 
   def start(_type, _args) do
@@ -47,8 +50,9 @@ defmodule Gremlex.Application do
     port = get_env(:port) |> parse_port()
     path = get_env(:path)
     pool_size = get_env(:pool_size)
+    secure = get_env(:secure) |> parse_secure()
 
-    children = build_app_worker(host, port, path, pool_size)
+    children = build_app_worker(host, port, path, pool_size, secure)
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
