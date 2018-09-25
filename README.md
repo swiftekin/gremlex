@@ -20,6 +20,7 @@ end
 
 ## Examples
 
+#### Basic Usage
 The two main modules that you'll want to use are `Gremlex.Graph` and `Gremlex.Client`.
 
 `Gremlex.Graph` is the module that hosts all the functions needed to build a Gremlin query.
@@ -40,6 +41,38 @@ iex(3)> Graph.g() |> Graph.v() |> Client.query
      properties: %{age: [29], name: ["marko"]}
    }
  ]}
+```
+
+#### Gremlin Query to Gremlex
+This gremlin query:
+```
+g.V().has("name","marko")
+  .out("knows")
+  .out("knows")
+  .values("name")
+```
+Would translate in Gremlex to:
+```elixir
+Graph.g()
+|> Graph.v()
+|> Graph.has("name", "marko")
+|> Graph.out("knows")
+|> Graph.out("knows")
+|> Graph.values("name")
+|> Client.query
+```
+
+#### Raw Queries
+```elixir
+Client.query("""
+  g.V().match(
+    __.as("a").out("knows").as("b"),
+    __.as("a").out("created").as("c"),
+    __.as("b").out("created").as("c"),
+    __.as("c").in("created").count().is(2)
+  )
+  .select("c").by("name")
+""")
 ```
 
 ## Configuration
