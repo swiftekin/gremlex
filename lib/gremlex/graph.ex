@@ -383,13 +383,13 @@ defmodule Gremlex.Graph do
   end
 
   @spec unfold(Gremlex.Graph.t()) :: Gremlex.Graph.t()
-  def unfold(graph, traversal) do
-    enqueue(graph, "unfold", [traversal])
+  def unfold(graph) do
+    enqueue(graph, "unfold", [])
   end
 
   @spec unfold(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
-  def unfold(graph) do
-    enqueue(graph, "unfold", [])
+  def unfold(graph, traversal) do
+    enqueue(graph, "unfold", [traversal])
   end
 
   @spec as(Gremlex.Graph.t(), List.t() | String.t()) :: Gremlex.Graph.t()
