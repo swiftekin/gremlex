@@ -35,7 +35,7 @@ defmodule Gremlex.MixProject do
   defp deps do
     [
       {:poison, "~> 3.1"},
-      {:httpoison, "~> 0.13.0"},
+      {:httpoison, "~> 1.3.1"},
       {:confex, "~> 3.2.3"},
       {:websockex, "~> 0.4.0"},
       {:uuid, "~> 1.1"},
