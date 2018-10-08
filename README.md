@@ -1,24 +1,29 @@
+<p align="center"><img src="logo.png"></img></p>
+
+[![Build Status](https://travis-ci.com/Revmaker/gremlex.svg?branch=master)](https://travis-ci.com/Revmaker/gremlex)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Gremlex
 
-An Elixir client for [Gremlin](http://tinkerpop.apache.org/gremlin.html).
+An Elixir client for Apache TinkerPop™ aka [Gremlin](http://tinkerpop.apache.org/gremlin.html).
 
 Gremlex does not support all functions (yet). It is pretty early on in it's development. But you can always use raw Gremlin queries by using `Client.query("<Insert gremlin query>")`
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `gremlex` to your list of dependencies in `mix.exs`:
+Install from Hex.pm:
 
 ```elixir
 def deps do
   [
-    {:gremlex, "~> 0.1.0"}
+    {:gremlex, "~> 0.1.1"}
   ]
 end
 ```
 
 ## Examples
 
+#### Basic Usage
 The two main modules that you'll want to use are `Gremlex.Graph` and `Gremlex.Client`.
 
 `Gremlex.Graph` is the module that hosts all the functions needed to build a Gremlin query.
@@ -41,6 +46,38 @@ iex(3)> Graph.g() |> Graph.v() |> Client.query
  ]}
 ```
 
+#### Gremlin Query to Gremlex
+This gremlin query:
+```
+g.V().has("name","marko")
+  .out("knows")
+  .out("knows")
+  .values("name")
+```
+Would translate in Gremlex to:
+```elixir
+Graph.g()
+|> Graph.v()
+|> Graph.has("name", "marko")
+|> Graph.out("knows")
+|> Graph.out("knows")
+|> Graph.values("name")
+|> Client.query
+```
+
+#### Raw Queries
+```elixir
+Client.query("""
+  g.V().match(
+    __.as("a").out("knows").as("b"),
+    __.as("a").out("created").as("c"),
+    __.as("b").out("created").as("c"),
+    __.as("c").in("created").count().is(2)
+  )
+  .select("c").by("name")
+""")
+```
+
 ## Configuration
 You can configure Gremlex by adding the following to your `config.exs`:
 
@@ -49,7 +86,8 @@ config :gremlex,
   host: "127.0.0.1",
   port: 8182,
   path: "/gremlin",
-  pool_size: 10
+  pool_size: 10,
+  secure: false
 ```
 
 Gremlex uses [confex](https://github.com/Nebo15/confex), so that you can easily define
@@ -61,3 +99,4 @@ simply have the parameters that need to be dynamically read at run time set to `
 * `port`: Port Gremlin is listening to on host (defaults to 8182)
 * `path`: Websocket path to Gremlin (defaults to "/gremlin")
 * `pool_size`: The number of connections to keep open in the pool (defaults to 10)
+* `secure`: Set to `true` to connect to a server with SSL enabled

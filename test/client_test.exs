@@ -64,10 +64,10 @@ defmodule Gremlex.ClientTests do
     test "allows you to create a relationship between two vertices" do
       {_, [s]} = g() |> add_v("foo") |> property("name", "bar") |> query()
       {_, [t]} = g() |> add_v("bar") |> property("name", "baz") |> query()
-      {result, response} = g() |> v(s.id) |> add_e("edge") |> to(t) |> query
+      {result, response} = g() |> v(s.id) |> add_e("isfriend") |> to(t) |> query
       assert result == :ok
       [edge] = response
-      assert edge.label == "edge"
+      assert edge.label == "isfriend"
     end
 
     test "allows you to get all edges" do
