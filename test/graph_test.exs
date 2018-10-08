@@ -75,6 +75,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "property/2" do
+    test "adds a property function to the queue" do
+      actual_graph = g() |> Graph.property("foo")
+      expected_graph = Queue.in({"property", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "property/3" do
     test "adds a property function to the queue" do
       actual_graph = g() |> Graph.property("foo", "bar")
@@ -123,6 +131,12 @@ defmodule Gremlex.GraphTests do
     test "adds a valueMap function to the queue" do
       actual_graph = g() |> Graph.value_map()
       expected_graph = Queue.in({"valueMap", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "adds a valueMap function to the queue with list of properties" do
+      actual_graph = g() |> Graph.value_map(["foo", "bar"])
+      expected_graph = Queue.in({"valueMap", ["foo", "bar"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -181,18 +195,24 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "out_e/1" do
+    test "adds an outE function to the queue" do
+      actual_graph = g() |> out_e()
+      expected_graph = Queue.in({"outE", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "out_e/2" do
     test "adds an outE function to the queue" do
       actual_graph = g() |> out_e("foo")
       expected_graph = Queue.in({"outE", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
-  end
 
-  describe "out_e/1" do
-    test "adds an outE function to the queue" do
-      actual_graph = g() |> out_e()
-      expected_graph = Queue.in({"outE", []}, Queue.new())
+    test "adds an outE function to the queue with list of edges" do
+      actual_graph = g() |> out_e(["foo", "bar"])
+      expected_graph = Queue.in({"outE", ["foo", "bar"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -245,18 +265,24 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "in_e/1" do
+    test "adds an inE function to the queue" do
+      actual_graph = g() |> in_e()
+      expected_graph = Queue.in({"inE", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "in_e/2" do
     test "adds an inE function to the queue" do
       actual_graph = g() |> in_e("foo")
       expected_graph = Queue.in({"inE", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
-  end
 
-  describe "in_e/1" do
-    test "adds an inE function to the queue" do
-      actual_graph = g() |> in_e()
-      expected_graph = Queue.in({"inE", []}, Queue.new())
+    test "adds an inE function to the queue with list of edges" do
+      actual_graph = g() |> in_e(["foo", "bar"])
+      expected_graph = Queue.in({"inE", ["foo", "bar"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -285,10 +311,38 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "both/2" do
+    test "adds a both function to the queue" do
+      actual_graph = g() |> both("foo")
+      expected_graph = Queue.in({"both", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "adds a both function to the queue with provided list" do
+      actual_graph = g() |> both(["foo", "bar"])
+      expected_graph = Queue.in({"both", ["foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "both_e/1" do
     test "adds a bothE function to the queue" do
       actual_graph = g() |> both_e()
       expected_graph = Queue.in({"bothE", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "both_e/2" do
+    test "adds a bothE function to the queue with provided list" do
+      actual_graph = g() |> both_e(["foo", "bar"])
+      expected_graph = Queue.in({"bothE", ["foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "adds a bothE function to the queue" do
+      actual_graph = g() |> both_e("foo")
+      expected_graph = Queue.in({"bothE", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -533,6 +587,122 @@ defmodule Gremlex.GraphTests do
       actual_graph = g() |> e(edge)
       expected_graph = Queue.in({"E", ["edge-id"]}, Queue.new())
       assert actual_graph == expected_graph
+    end
+  end
+
+  describe "coalesce/2" do
+    test "adds a coalesce function to the queue" do
+      actual_graph = g() |> coalesce(["foo", "bar"])
+      expected_graph = Queue.in({"coalesce", ["foo", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "fold/1" do
+    test "adds a fold function to the queue" do
+
+    end
+  end
+
+  describe "unfold/0" do
+    test "adds a unfold function to the queue" do
+
+    end
+  end
+
+  describe "unfold/1" do
+    test "adds a unfold function to the queue" do
+
+    end
+  end
+
+  describe "unfold/2" do
+    test "adds a unfold function to the queue" do
+
+    end
+  end
+
+  describe "select/1" do
+    test "adds a select function to the queue" do
+
+    end
+  end
+
+  describe "select/2" do
+    test "adds a select function to the queue" do
+
+    end
+  end
+
+  describe "by/2" do
+    test "adds a by function to the queue" do
+
+    end
+  end
+
+  describe "path/1" do
+    test "adds a path function to the queue" do
+
+    end
+  end
+
+  describe "simple_path/1" do
+    test "adds a simplePath function to the queue" do
+
+    end
+  end
+
+  describe "from/2" do
+    test "adds a from function to the queue" do
+
+    end
+  end
+
+  describe "repeat/2" do
+    test "adds a repeat function to the queue" do
+
+    end
+  end
+
+  describe "until/2" do
+    test "adds a until function to the queue" do
+
+    end
+  end
+
+  describe "loops/1" do
+    test "adds a loops function to the queue" do
+
+    end
+  end
+
+  describe "is/2" do
+    test "adds a is function to the queue" do
+
+    end
+  end
+
+  describe "eq/1" do
+    test "adds a eq function to the queue" do
+
+    end
+  end
+
+  describe "where/2" do
+    test "adds a where function to the queue" do
+
+    end
+  end
+
+  describe "not_/1" do
+    test "adds a not function to the queue" do
+
+    end
+  end
+
+  describe "not_/2" do
+    test "adds a not function to the queue" do
+
     end
   end
 end
