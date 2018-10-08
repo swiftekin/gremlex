@@ -383,6 +383,11 @@ defmodule Gremlex.Graph do
   end
 
   @spec unfold(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def unfold(graph, traversal) do
+    enqueue(graph, "unfold", [traversal])
+  end
+
+  @spec unfold(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def unfold(graph) do
     enqueue(graph, "unfold", [])
   end
