@@ -217,7 +217,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "inV", labels)
   end
 
-  @spec out_v(Gremlex.Graph.t() | String.t()) :: Gremlex.Graph.t()
+  @spec out_v(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def out_v(graph) do
     enqueue(graph, "outV", [])
   end
@@ -257,7 +257,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "bothV", [])
   end
 
-  @spec both_v(Gremlex.Graph.t(), List.t() | Graph.t()) :: Gremlex.Graph.t()
+  @spec both_v(Gremlex.Graph.t(), List.t() | String.t()) :: Gremlex.Graph.t()
   def both_v(graph, labels) do
     enqueue(graph, "bothV", labels)
   end
