@@ -30,6 +30,11 @@ defmodule Gremlex.Graph do
   @spec g :: Gremlex.Graph.t()
   def g, do: Queue.new()
 
+  @spec anonymous :: Gremlex.Graph.t()
+  def anonymous do
+    enqueue(Queue.new(), "__", [])
+  end
+
   @doc """
   Appends an addV command to the traversal.
   Returns a graph to allow chaining.
@@ -496,11 +501,17 @@ defmodule Gremlex.Graph do
       end)
       |> Enum.join(", ")
 
-    case acc do
-      "" -> encode(remainder, acc <> "#{op}(#{args})")
-      _ -> encode(remainder, acc <> ".#{op}(#{args})")
-    end
+    construct_fn_call(acc, op, args, remainder)
   end
+
+  @spec construct_fn_call(String.t(), String.t(), String.t(), Gremlex.Graph.t()) :: String.t()
+  defp construct_fn_call("", "__", _, remainder), do: encode(remainder, "" <> "__")
+
+  defp construct_fn_call(_, "__", _, _), do: raise "Not a valid traversal"
+
+  defp construct_fn_call("", op, args, remainder), do: encode(remainder, "" <> "#{op}(#{args})")
+
+  defp construct_fn_call(acc, op, args, remainder), do: encode(remainder, acc <> ".#{op}(#{args})")
 
   @spec escape(String.t()) :: String.t()
   defp escape(str) do

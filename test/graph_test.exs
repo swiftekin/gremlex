@@ -11,6 +11,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "anonymous/0" do
+    test "adds __ function to the queue" do
+      actual_graph = anonymous()
+      expected_graph = Queue.in({"__", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "add_v/1" do
     test "adds an addVertex function to the queue" do
       actual_graph = g() |> add_v(1)
@@ -541,7 +549,7 @@ defmodule Gremlex.GraphTests do
         has_label("foo") |>
         fold() |>
         coalesce([g() |> unfold(), g() |> v("2")])
-        
+
       expected_query =
         "g.V('1').hasLabel('foo').fold().coalesce(unfold(), g.V('2'))"
 
@@ -554,12 +562,12 @@ defmodule Gremlex.GraphTests do
       |> v("1")
       |> repeat(g() |> both_e() |> as("e") |> both_v() |> simple_path())
       |> until(g() |> has_label("foo") |> or_() |> loops() |> is(g() |> eq(2)))
-      |> where(g() |> not_(g() |> in_e("bar")))
+      |> where(anonymous() |> not_(g() |> in_e("bar")))
       |> as("b")
       |> select(["e", "b"])
 
       expected_query =
-        "g.V('1').repeat(bothE().as('e').bothV().simplePath()).until(hasLabel('foo').or().loops().is(eq(2))).where(not(inE('bar'))).as('b').select('e', 'b')"
+        "g.V('1').repeat(bothE().as('e').bothV().simplePath()).until(hasLabel('foo').or().loops().is(eq(2))).where(__.not(inE('bar'))).as('b').select('e', 'b')"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
