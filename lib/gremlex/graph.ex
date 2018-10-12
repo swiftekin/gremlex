@@ -346,6 +346,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "groupCount", [])
   end
 
+  @spec group_count(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def group_count(graph, key) do
+    enqueue(graph, "groupCount", key)
+  end
+
   defp enqueue(graph, op, args) when is_list(args) do
     Queue.in({op, args}, graph)
   end
