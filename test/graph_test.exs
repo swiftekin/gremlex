@@ -467,6 +467,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "count/1" do
+    test "adds a count function to the queue" do
+      actual_graph = g() |> count()
+      expected_graph = Queue.in({"count", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "encode/1" do
     test "compiles queue into a query" do
       graph =

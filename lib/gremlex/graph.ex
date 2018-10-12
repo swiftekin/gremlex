@@ -332,6 +332,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "id", [])
   end
 
+  @spec count(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def count(graph) do
+    enqueue(graph, "count", [])
+  end
+
   defp enqueue(graph, op, args) when is_list(args) do
     Queue.in({op, args}, graph)
   end
