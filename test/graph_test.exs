@@ -451,6 +451,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "id/1" do
+    test "adds a id function to the queue" do
+      actual_graph = g() |> id()
+      expected_graph = Queue.in({"id", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "encode/1" do
     test "compiles queue into a query" do
       graph =

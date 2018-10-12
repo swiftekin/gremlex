@@ -322,6 +322,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "iterate", [])
   end
 
+  @spec id(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def id(graph) do
+    enqueue(graph, "id", [])
+  end
+
   defp enqueue(graph, op, args) when is_list(args) do
     Queue.in({op, args}, graph)
   end
