@@ -332,6 +332,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "id", [])
   end
 
+  @spec cyclic_path(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def cyclic_path(graph) do
+    enqueue(graph, "cyclicPath", [])
+  end
+
   defp enqueue(graph, op, args) when is_list(args) do
     Queue.in({op, args}, graph)
   end
