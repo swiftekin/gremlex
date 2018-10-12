@@ -17,3 +17,5 @@ services:
       - GREMLEX_HOST=gremlin
     depends_on:
       - gremlin
+    volumes:
+      - ../:/app
