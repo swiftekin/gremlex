@@ -322,6 +322,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "iterate", [])
   end
 
+  @spec identity(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def identity(graph) do
+    enqueue(graph, "identity", [])
+  end
+
   @spec id(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def id(graph) do
     enqueue(graph, "id", [])
