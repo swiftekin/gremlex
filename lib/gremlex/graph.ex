@@ -107,7 +107,8 @@ defmodule Gremlex.Graph do
   end
 
   @doc """
-  Appends store command to the traversal.
+  Appends the store command to the traversal. Takes in a graph and the name of
+  the side effect key that will hold the aggregate.
   Returns a graph to allow chaining.
   """
   @spec properties(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
