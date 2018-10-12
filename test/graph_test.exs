@@ -35,6 +35,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "aggregate/2" do
+    test "adds an aggregate function to the queue" do
+      actual_graph = g() |> Graph.aggregate("foo")
+      expected_graph = Queue.in({"aggregate", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "has_label/1" do
     test "adds a hasLabel function to the queue" do
       actual_graph = g() |> has_label("foo")
