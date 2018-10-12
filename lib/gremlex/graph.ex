@@ -53,6 +53,15 @@ defmodule Gremlex.Graph do
     enqueue(graph, "addE", [edge])
   end
 
+  @doc """
+  Appends an aggregate command to the traversal.
+  Returns a graph to allow chaining.
+  """
+  @spec aggregate(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def aggregate(graph, aggregate) do
+    enqueue(graph, "aggregate", aggregate)
+  end
+
   @spec has_label(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def has_label(graph, label) do
     enqueue(graph, "hasLabel", [label])
