@@ -62,6 +62,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "aggregate", aggregate)
   end
 
+  @doc """
+  Appends a coin command to the traversal. Takes in a graph and a probability
+  modifier as parameters.
+  Returns a graph to allow chaining.
+  """
+  @spec coin(Gremlex.Graph.t(), Float.t()) :: Gremlex.Graph.t()
+  def coin(graph, probability) do
+    enqueue(graph, "coin", probability)
+  end
+
   @spec has_label(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def has_label(graph, label) do
     enqueue(graph, "hasLabel", [label])
