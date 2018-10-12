@@ -346,6 +346,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "groupCount", [])
   end
 
+  @doc """
+  Appends groupCount command to the traversal. Takes in a graph and the name
+  of the key that will hold the aggregated grouping.
+  Returns a graph to allow chainig.
+  """
   @spec group_count(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
   def group_count(graph, key) do
     enqueue(graph, "groupCount", key)
