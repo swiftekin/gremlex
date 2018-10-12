@@ -332,6 +332,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "id", [])
   end
 
+  @spec group(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def group(graph) do
+    enqueue(graph, "group", [])
+  end
+
   defp enqueue(graph, op, args) when is_list(args) do
     Queue.in({op, args}, graph)
   end
