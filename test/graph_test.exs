@@ -143,6 +143,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "store/2" do
+    test "adds a store function to the queue" do
+      actual_graph = g() |> Graph.store("foo")
+      expected_graph = Queue.in({"store", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "value_map/1" do
     test "adds a valueMap function to the queue" do
       actual_graph = g() |> Graph.value_map()

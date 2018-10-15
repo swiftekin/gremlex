@@ -115,6 +115,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "properties", [])
   end
 
+  @doc """
+  Appends the store command to the traversal. Takes in a graph and the name of
+  the side effect key that will hold the aggregate.
+  Returns a graph to allow chaining.
+  """
+  @spec properties(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def store(graph, store) do
+    enqueue(graph, "store", store)
+  end
+
       @doc """
   Appends valueMap command to the traversal.
   Returns a graph to allow chaining.
