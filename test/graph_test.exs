@@ -43,6 +43,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "coin/2" do
+    test "adds a coin function to the queue" do
+      actual_graph = g() |> Graph.coin(1.0)
+      expected_graph = Queue.in({"coin", [1.0]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "has_label/1" do
     test "adds a hasLabel function to the queue" do
       actual_graph = g() |> has_label("foo")
@@ -139,6 +147,14 @@ defmodule Gremlex.GraphTests do
     test "adds a properties function to the queue" do
       actual_graph = g() |> Graph.properties()
       expected_graph = Queue.in({"properties", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "store/2" do
+    test "adds a store function to the queue" do
+      actual_graph = g() |> Graph.store("foo")
+      expected_graph = Queue.in({"store", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
