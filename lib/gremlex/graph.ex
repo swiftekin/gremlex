@@ -62,6 +62,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "aggregate", aggregate)
   end
 
+  @doc """
+  Appends a coin command to the traversal. Takes in a graph and a probability
+  modifier as parameters.
+  Returns a graph to allow chaining.
+  """
+  @spec coin(Gremlex.Graph.t(), Float.t()) :: Gremlex.Graph.t()
+  def coin(graph, probability) do
+    enqueue(graph, "coin", probability)
+  end
+
   @spec has_label(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
   def has_label(graph, label) do
     enqueue(graph, "hasLabel", [label])
@@ -113,6 +123,16 @@ defmodule Gremlex.Graph do
   @spec properties(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def properties(graph) do
     enqueue(graph, "properties", [])
+  end
+
+  @doc """
+  Appends the store command to the traversal. Takes in a graph and the name of
+  the side effect key that will hold the aggregate.
+  Returns a graph to allow chaining.
+  """
+  @spec properties(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def store(graph, store) do
+    enqueue(graph, "store", store)
   end
 
       @doc """
@@ -336,6 +356,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "identity", [])
   end
 
+  @spec constant(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def constant(graph, constant) do
+    enqueue(graph, "constant", constant)
+  end
+
   @spec id(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def id(graph) do
     enqueue(graph, "id", [])
@@ -344,6 +369,21 @@ defmodule Gremlex.Graph do
   @spec group(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def group(graph) do
     enqueue(graph, "group", [])
+  end
+
+  @spec group_count(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def group_count(graph) do
+    enqueue(graph, "groupCount", [])
+  end
+
+  @doc """
+  Appends groupCount command to the traversal. Takes in a graph and the name
+  of the key that will hold the aggregated grouping.
+  Returns a graph to allow chainig.
+  """
+  @spec group_count(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def group_count(graph, key) do
+    enqueue(graph, "groupCount", key)
   end
 
   defp enqueue(graph, op, args) when is_list(args) do
