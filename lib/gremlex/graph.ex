@@ -351,6 +351,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "iterate", [])
   end
 
+  @spec min(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def min(graph) do
+    enqueue(graph, "min", [])
+  end
+
   @spec identity(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def identity(graph) do
     enqueue(graph, "identity", [])
