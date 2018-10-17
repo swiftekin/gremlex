@@ -515,6 +515,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "group/1" do
+    test "adds a group function to the queue" do
+      actual_graph = g() |> group()
+      expected_graph = Queue.in({"group", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "constant/2" do
     test "adds a constant function to the queue" do
       actual_graph = g() |> Graph.constant("foo")
