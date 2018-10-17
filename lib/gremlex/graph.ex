@@ -351,6 +351,10 @@ defmodule Gremlex.Graph do
     enqueue(graph, "iterate", [])
   end
 
+  @spec sum(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def sum(graph) do
+    enqueue(graph, "sum", [])
+  end
 
   @spec min(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def min(graph) do
