@@ -475,6 +475,30 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "sum/1" do
+    test "adds a sum function to the queue" do
+      actual_graph = g() |> sum()
+      expected_graph = Queue.in({"sum", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "min/1" do
+    test "adds a min function to the queue" do
+      actual_graph = g() |> min()
+      expected_graph = Queue.in({"min", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "max/1" do
+    test "adds a max function to the queue" do
+      actual_graph = g() |> max()
+      expected_graph = Queue.in({"max", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "identity/1" do
     test "adds a identity function to the queue" do
       actual_graph = g() |> identity()
