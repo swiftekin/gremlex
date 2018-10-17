@@ -381,6 +381,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "id", [])
   end
 
+  @spec count(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def count(graph) do
+    enqueue(graph, "count", [])
+  end
+
   @spec group(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def group(graph) do
     enqueue(graph, "group", [])
