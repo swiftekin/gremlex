@@ -475,6 +475,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "min/1" do
+    test "adds a min function to the queue" do
+      actual_graph = g() |> min()
+      expected_graph = Queue.in({"min", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "max/1" do
     test "adds a max function to the queue" do
       actual_graph = g() |> max()
