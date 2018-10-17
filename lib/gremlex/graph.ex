@@ -351,6 +351,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "iterate", [])
   end
 
+  @spec max(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def max(graph) do
+    enqueue(graph, "max", [])
+  end
+
   @spec identity(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def identity(graph) do
     enqueue(graph, "identity", [])
