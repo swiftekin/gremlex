@@ -381,6 +381,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "id", [])
   end
 
+  @spec cyclic_path(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def cyclic_path(graph) do
+    enqueue(graph, "cyclicPath", [])
+  end
+
   @spec count(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def count(graph) do
     enqueue(graph, "count", [])
