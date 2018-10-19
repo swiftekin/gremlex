@@ -58,9 +58,7 @@ defmodule Gremlex.MixProject do
   end
 
   defp description do
-    "An Elixir client for Gremlin.
-
-    Gremlex does not support all functions (yet). It is pretty early on in it's development. But you can always use raw Gremlin queries by using Client.query(\"<Insert gremlin query>\")"
+    "An Elixir client for Gremlin (Apache TinkerPop™), a simple to use library for creating Gremlin queries."
   end
 
   defp package() do
