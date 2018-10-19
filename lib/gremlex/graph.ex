@@ -62,6 +62,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "aggregate", aggregate)
   end
 
+  @spec barrier(Gremlex.Graph.t(), non_neg_integer()) :: Gremlex.Graph.t()
+  def barrier(graph, max_barrier_size) do
+    enqueue(graph, "barrier", max_barrier_size)
+  end
+
+  @spec barrier(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def barrier(graph) do
+    enqueue(graph, "barrier", [])
+  end
+
   @doc """
   Appends a coin command to the traversal. Takes in a graph and a probability
   modifier as parameters.
