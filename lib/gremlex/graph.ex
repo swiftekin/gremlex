@@ -111,7 +111,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "property", [:set, key, value])
   end
 
-    @doc """
+  @doc """
   Appends properties command to the traversal.
   Returns a graph to allow chaining.
   """
@@ -135,7 +135,7 @@ defmodule Gremlex.Graph do
     enqueue(graph, "store", store)
   end
 
-      @doc """
+  @doc """
   Appends valueMap command to the traversal.
   Returns a graph to allow chaining.
   """
@@ -596,11 +596,12 @@ defmodule Gremlex.Graph do
   @spec construct_fn_call(String.t(), String.t(), String.t(), Gremlex.Graph.t()) :: String.t()
   defp construct_fn_call("", "__", _, remainder), do: encode(remainder, "" <> "__")
 
-  defp construct_fn_call(_, "__", _, _), do: raise "Not a valid traversal"
+  defp construct_fn_call(_, "__", _, _), do: raise("Not a valid traversal")
 
   defp construct_fn_call("", op, args, remainder), do: encode(remainder, "" <> "#{op}(#{args})")
 
-  defp construct_fn_call(acc, op, args, remainder), do: encode(remainder, acc <> ".#{op}(#{args})")
+  defp construct_fn_call(acc, op, args, remainder),
+    do: encode(remainder, acc <> ".#{op}(#{args})")
 
   @spec escape(String.t()) :: String.t()
   defp escape(str) do
