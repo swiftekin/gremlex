@@ -82,6 +82,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "has", [key, value])
   end
 
+  @spec key(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def key(graph) do
+    enqueue(graph, "key", [])
+  end
+
   @doc """
   Appends property command to the traversal.
   Returns a graph to allow chaining.
