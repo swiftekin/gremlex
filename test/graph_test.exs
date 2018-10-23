@@ -690,9 +690,9 @@ defmodule Gremlex.GraphTests do
         |> select(["e", "b"])
 
       expected_query =
-      "g.V('1').repeat(bothE().as('e').bothV().simplePath())" <>
-      ".until(hasLabel('foo').or().loops().is(eq(2)))"        <>
-      ".where(__.not(inE('bar'))).as('b').select('e', 'b')"
+        "g.V('1').repeat(bothE().as('e').bothV().simplePath())" <>
+          ".until(hasLabel('foo').or().loops().is(eq(2)))" <>
+          ".where(__.not(inE('bar'))).as('b').select('e', 'b')"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
