@@ -20,7 +20,8 @@ defmodule Gremlex.MixProject do
         "coveralls.html": :test
       ],
       docs: [
-        main: "Gremlex", # The main page in the docs
+        # The main page in the docs
+        main: "Gremlex",
         logo: "logo.png",
         extras: ["README.md"]
       ]

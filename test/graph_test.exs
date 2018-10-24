@@ -574,7 +574,11 @@ defmodule Gremlex.GraphTests do
   describe "encode/1" do
     test "compiles queue into a query" do
       graph =
-        g() |> v() |> has_label("Intent") |> has("name", "request.group") |> out("sedan")
+        g()
+        |> v()
+        |> has_label("Intent")
+        |> has("name", "request.group")
+        |> out("sedan")
         |> values("name")
 
       expected_query =
@@ -653,41 +657,42 @@ defmodule Gremlex.GraphTests do
     end
 
     test "compiles queue with nil value" do
-      graph =
-        g() |> v() |> has("name", nil)
+      graph = g() |> v() |> has("name", nil)
 
-      expected_query =
-        "g.V().has('name', none)"
+      expected_query = "g.V().has('name', none)"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
     end
 
     test "add functions as arguments without prepending g. unless it is function v()" do
-      graph = g() |>
-        v("1") |>
-        has_label("foo") |>
-        fold() |>
-        coalesce([g() |> unfold(), g() |> v("2")])
+      graph =
+        g()
+        |> v("1")
+        |> has_label("foo")
+        |> fold()
+        |> coalesce([g() |> unfold(), g() |> v("2")])
 
-      expected_query =
-        "g.V('1').hasLabel('foo').fold().coalesce(unfold(), g.V('2'))"
+      expected_query = "g.V('1').hasLabel('foo').fold().coalesce(unfold(), g.V('2'))"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
     end
 
     test "deeply nested traversals" do
-      graph = g()
-      |> v("1")
-      |> repeat(g() |> both_e() |> as("e") |> both_v() |> simple_path())
-      |> until(g() |> has_label("foo") |> or_() |> loops() |> is(g() |> eq(2)))
-      |> where(anonymous() |> not_(g() |> in_e("bar")))
-      |> as("b")
-      |> select(["e", "b"])
+      graph =
+        g()
+        |> v("1")
+        |> repeat(g() |> both_e() |> as("e") |> both_v() |> simple_path())
+        |> until(g() |> has_label("foo") |> or_() |> loops() |> is(g() |> eq(2)))
+        |> where(anonymous() |> not_(g() |> in_e("bar")))
+        |> as("b")
+        |> select(["e", "b"])
 
       expected_query =
-        "g.V('1').repeat(bothE().as('e').bothV().simplePath()).until(hasLabel('foo').or().loops().is(eq(2))).where(__.not(inE('bar'))).as('b').select('e', 'b')"
+        "g.V('1').repeat(bothE().as('e').bothV().simplePath())" <>
+          ".until(hasLabel('foo').or().loops().is(eq(2)))" <>
+          ".where(__.not(inE('bar'))).as('b').select('e', 'b')"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
@@ -727,6 +732,7 @@ defmodule Gremlex.GraphTests do
         out_vertex: %Vertex{id: 678, label: "outVert"},
         properties: %{}
       }
+
       actual_graph = g() |> e(edge)
       expected_graph = Queue.in({"E", [123]}, Queue.new())
       assert actual_graph == expected_graph
@@ -742,6 +748,7 @@ defmodule Gremlex.GraphTests do
         out_vertex: %Vertex{id: "out-v-id", label: "outVert"},
         properties: %{}
       }
+
       actual_graph = g() |> e(edge)
       expected_graph = Queue.in({"E", ["edge-id"]}, Queue.new())
       assert actual_graph == expected_graph
