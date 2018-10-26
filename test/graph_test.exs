@@ -43,6 +43,22 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "barrier/2" do
+    test "adds a barrier function with parameter to the queue" do
+      actual_graph = g() |> Graph.barrier(1)
+      expected_graph = Queue.in({"barrier", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "barrier/1" do
+    test "adds a barrier function to the queue" do
+      actual_graph = g() |> Graph.barrier()
+      expected_graph = Queue.in({"barrier", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "coin/2" do
     test "adds a coin function to the queue" do
       actual_graph = g() |> Graph.coin(1.0)
