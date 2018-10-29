@@ -376,6 +376,16 @@ defmodule Gremlex.Graph do
     enqueue(graph, "inject", [target])
   end
 
+  @spec tail(Gremlex.Graph.t()) :: Gremlex.Graph.t()
+  def tail(graph) do
+    enqueue(graph, "tail", [1])
+  end
+
+  @spec tail(Gremlex.Graph.t(), non_neg_integer()) :: Gremlex.Graph.t()
+  def tail(graph, size) do
+    enqueue(graph, "tail", [size])
+  end
+
   @spec min(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def min(graph) do
     enqueue(graph, "min", [])

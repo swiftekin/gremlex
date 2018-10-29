@@ -899,6 +899,22 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "tail/1" do
+    test "adds a tail function to the queue" do
+      actual_graph = g() |> tail()
+      expected_graph = Queue.in({"tail", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "tail/2" do
+    test "adds a tail function to the queue" do
+      actual_graph = g() |> tail(2)
+      expected_graph = Queue.in({"tail", [2]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "eq/2" do
     test "adds a eq function to the queue" do
       actual_graph = g() |> eq(1)
