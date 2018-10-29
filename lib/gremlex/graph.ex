@@ -371,6 +371,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "sum", [])
   end
 
+  @spec inject(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def inject(graph, target) do
+    enqueue(graph, "inject", [target])
+  end
+
   @spec min(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def min(graph) do
     enqueue(graph, "min", [])

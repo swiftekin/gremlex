@@ -891,6 +891,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "inject/2" do
+    test "adds a inject function to the queue" do
+      actual_graph = g() |> inject("Daniel")
+      expected_graph = Queue.in({"inject", ["Daniel"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "eq/2" do
     test "adds a eq function to the queue" do
       actual_graph = g() |> eq(1)
