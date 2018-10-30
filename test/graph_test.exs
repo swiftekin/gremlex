@@ -99,6 +99,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "has_not/2" do
+    test "adds a hasNot function to the queue" do
+      actual_graph = g() |> Graph.has_not("age")
+      expected_graph = Queue.in({"hasNot", ["age"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "key/1" do
     test "adds a key function to the queue" do
       actual_graph = g() |> Graph.key()
