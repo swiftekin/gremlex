@@ -496,6 +496,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "hasKey", key)
   end
 
+  @spec has_not(Gremlex.Graph.t(), String.t()) :: Gremlex.Graph.t()
+  def has_not(graph, key) do
+    enqueue(graph, "hasNot", key)
+  end
+
   @spec coalesce(Gremlex.Graph.t(), List.t() | String.t()) :: Gremlex.Graph.t()
   def coalesce(graph, traversals) do
     enqueue(graph, "coalesce", traversals)
