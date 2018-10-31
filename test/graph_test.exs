@@ -115,6 +115,14 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "has_id/2" do
+    test "adds a hasId function to the queue" do
+      actual_graph = g() |> Graph.has_id(20)
+      expected_graph = Queue.in({"hasId", [20]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "has_key/1" do
     test "adds a hasKey function to the queue" do
       actual_graph = g() |> Graph.has_key(["name", "age"])

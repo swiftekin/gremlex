@@ -491,6 +491,11 @@ defmodule Gremlex.Graph do
     graph |> has(namespace_property(), ns)
   end
 
+  @spec has_id(Gremlex.Graph.t(), any()) :: Gremlex.Graph.t()
+  def has_id(graph, id) do
+    enqueue(graph, "hasId", id)
+  end
+
   @spec has_key(Gremlex.Graph.t(), List.t() | String.t()) :: Gremlex.Graph.t()
   def has_key(graph, key) do
     enqueue(graph, "hasKey", key)
