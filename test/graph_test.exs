@@ -35,6 +35,38 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "aggregate/2" do
+    test "adds an aggregate function to the queue" do
+      actual_graph = g() |> Graph.aggregate("foo")
+      expected_graph = Queue.in({"aggregate", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "barrier/2" do
+    test "adds a barrier function with parameter to the queue" do
+      actual_graph = g() |> Graph.barrier(1)
+      expected_graph = Queue.in({"barrier", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "barrier/1" do
+    test "adds a barrier function to the queue" do
+      actual_graph = g() |> Graph.barrier()
+      expected_graph = Queue.in({"barrier", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "coin/2" do
+    test "adds a coin function to the queue" do
+      actual_graph = g() |> Graph.coin(1.0)
+      expected_graph = Queue.in({"coin", [1.0]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "has_label/1" do
     test "adds a hasLabel function to the queue" do
       actual_graph = g() |> has_label("foo")
@@ -63,6 +95,38 @@ defmodule Gremlex.GraphTests do
     test "adds a has function with namespace to the queue" do
       actual_graph = g() |> has_namespace("bar")
       expected_graph = Queue.in({"has", ["namespace", "bar"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "has_not/2" do
+    test "adds a hasNot function to the queue" do
+      actual_graph = g() |> Graph.has_not("age")
+      expected_graph = Queue.in({"hasNot", ["age"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "key/1" do
+    test "adds a key function to the queue" do
+      actual_graph = g() |> Graph.key()
+      expected_graph = Queue.in({"key", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "has_id/2" do
+    test "adds a hasId function to the queue" do
+      actual_graph = g() |> Graph.has_id(20)
+      expected_graph = Queue.in({"hasId", [20]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "has_key/1" do
+    test "adds a hasKey function to the queue" do
+      actual_graph = g() |> Graph.has_key(["name", "age"])
+      expected_graph = Queue.in({"hasKey", ["name", "age"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -131,6 +195,14 @@ defmodule Gremlex.GraphTests do
     test "adds a properties function to the queue" do
       actual_graph = g() |> Graph.properties()
       expected_graph = Queue.in({"properties", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "store/2" do
+    test "adds a store function to the queue" do
+      actual_graph = g() |> Graph.store("foo")
+      expected_graph = Queue.in({"store", ["foo"]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -451,10 +523,26 @@ defmodule Gremlex.GraphTests do
     end
   end
 
-  describe "id/1" do
-    test "adds a id function to the queue" do
-      actual_graph = g() |> id()
-      expected_graph = Queue.in({"id", []}, Queue.new())
+  describe "sum/1" do
+    test "adds a sum function to the queue" do
+      actual_graph = g() |> sum()
+      expected_graph = Queue.in({"sum", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "min/1" do
+    test "adds a min function to the queue" do
+      actual_graph = g() |> min()
+      expected_graph = Queue.in({"min", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "max/1" do
+    test "adds a max function to the queue" do
+      actual_graph = g() |> max()
+      expected_graph = Queue.in({"max", []}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
@@ -467,10 +555,70 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "id/1" do
+    test "adds a id function to the queue" do
+      actual_graph = g() |> id()
+      expected_graph = Queue.in({"id", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "cyclic_path/1" do
+    test "adds a cyclicPath function to the queue" do
+      actual_graph = g() |> cyclic_path()
+      expected_graph = Queue.in({"cyclicPath", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "count/1" do
+    test "adds a count function to the queue" do
+      actual_graph = g() |> count()
+      expected_graph = Queue.in({"count", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "group/1" do
+    test "adds a group function to the queue" do
+      actual_graph = g() |> group()
+      expected_graph = Queue.in({"group", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "constant/2" do
+    test "adds a constant function to the queue" do
+      actual_graph = g() |> Graph.constant("foo")
+      expected_graph = Queue.in({"constant", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "group_count/1" do
+    test "adds a groupCount function to the queue" do
+      actual_graph = g() |> group_count()
+      expected_graph = Queue.in({"groupCount", []}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "group_count/2" do
+    test "adds a groupCount function to the queue" do
+      actual_graph = g() |> group_count("foo")
+      expected_graph = Queue.in({"groupCount", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "encode/1" do
     test "compiles queue into a query" do
       graph =
-        g() |> v() |> has_label("Intent") |> has("name", "request.group") |> out("sedan")
+        g()
+        |> v()
+        |> has_label("Intent")
+        |> has("name", "request.group")
+        |> out("sedan")
         |> values("name")
 
       expected_query =
@@ -549,41 +697,42 @@ defmodule Gremlex.GraphTests do
     end
 
     test "compiles queue with nil value" do
-      graph =
-        g() |> v() |> has("name", nil)
+      graph = g() |> v() |> has("name", nil)
 
-      expected_query =
-        "g.V().has('name', none)"
+      expected_query = "g.V().has('name', none)"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
     end
 
     test "add functions as arguments without prepending g. unless it is function v()" do
-      graph = g() |>
-        v("1") |>
-        has_label("foo") |>
-        fold() |>
-        coalesce([g() |> unfold(), g() |> v("2")])
+      graph =
+        g()
+        |> v("1")
+        |> has_label("foo")
+        |> fold()
+        |> coalesce([g() |> unfold(), g() |> v("2")])
 
-      expected_query =
-        "g.V('1').hasLabel('foo').fold().coalesce(unfold(), g.V('2'))"
+      expected_query = "g.V('1').hasLabel('foo').fold().coalesce(unfold(), g.V('2'))"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
     end
 
     test "deeply nested traversals" do
-      graph = g()
-      |> v("1")
-      |> repeat(g() |> both_e() |> as("e") |> both_v() |> simple_path())
-      |> until(g() |> has_label("foo") |> or_() |> loops() |> is(g() |> eq(2)))
-      |> where(anonymous() |> not_(g() |> in_e("bar")))
-      |> as("b")
-      |> select(["e", "b"])
+      graph =
+        g()
+        |> v("1")
+        |> repeat(g() |> both_e() |> as("e") |> both_v() |> simple_path())
+        |> until(g() |> has_label("foo") |> or_() |> loops() |> is(g() |> eq(2)))
+        |> where(anonymous() |> not_(g() |> in_e("bar")))
+        |> as("b")
+        |> select(["e", "b"])
 
       expected_query =
-        "g.V('1').repeat(bothE().as('e').bothV().simplePath()).until(hasLabel('foo').or().loops().is(eq(2))).where(__.not(inE('bar'))).as('b').select('e', 'b')"
+        "g.V('1').repeat(bothE().as('e').bothV().simplePath())" <>
+          ".until(hasLabel('foo').or().loops().is(eq(2)))" <>
+          ".where(__.not(inE('bar'))).as('b').select('e', 'b')"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
@@ -623,6 +772,7 @@ defmodule Gremlex.GraphTests do
         out_vertex: %Vertex{id: 678, label: "outVert"},
         properties: %{}
       }
+
       actual_graph = g() |> e(edge)
       expected_graph = Queue.in({"E", [123]}, Queue.new())
       assert actual_graph == expected_graph
@@ -638,6 +788,7 @@ defmodule Gremlex.GraphTests do
         out_vertex: %Vertex{id: "out-v-id", label: "outVert"},
         properties: %{}
       }
+
       actual_graph = g() |> e(edge)
       expected_graph = Queue.in({"E", ["edge-id"]}, Queue.new())
       assert actual_graph == expected_graph
@@ -760,6 +911,30 @@ defmodule Gremlex.GraphTests do
     test "adds a is function to the queue" do
       actual_graph = g() |> is("foo")
       expected_graph = Queue.in({"is", ["foo"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "inject/2" do
+    test "adds a inject function to the queue" do
+      actual_graph = g() |> inject("Daniel")
+      expected_graph = Queue.in({"inject", ["Daniel"]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "tail/1" do
+    test "adds a tail function to the queue" do
+      actual_graph = g() |> tail()
+      expected_graph = Queue.in({"tail", [1]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "tail/2" do
+    test "adds a tail function to the queue" do
+      actual_graph = g() |> tail(2)
+      expected_graph = Queue.in({"tail", [2]}, Queue.new())
       assert actual_graph == expected_graph
     end
   end
