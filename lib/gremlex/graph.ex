@@ -206,6 +206,11 @@ defmodule Gremlex.Graph do
     enqueue(graph, "V", [id])
   end
 
+  @spec v(Gremlex.Graph.t(), List.t() | String.t()) :: Gremlex.Graph.t()
+  def v(graph, id) do
+    enqueue(graph, "V", id)
+  end
+
   @spec in_e(Gremlex.Graph.t()) :: Gremlex.Graph.t()
   def in_e(graph) do
     enqueue(graph, "inE", [])
