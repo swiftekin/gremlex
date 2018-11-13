@@ -607,6 +607,40 @@ defmodule Gremlex.Graph do
   end
 
   @doc """
+  Creates a `within` predicate that will match at least one of the values provided.
+  Takes in a range or a list as the values.
+  Examples:
+  ```
+  g.V().has('age', within(1..18))
+  g.V().has('name', within(["some", "value"]))
+  ```
+  """
+  def within(%Range{} = range) do
+    enqueue(Queue.new(), "within", [range])
+  end
+
+  def within(values) do
+    enqueue(Queue.new(), "within", values)
+  end
+
+  @doc """
+  Creates a `without` predicate that will filter out values that match the values provided.
+  Takes in a range or a list as the values.
+  Examples:
+  ```
+  g.V().has('age', without(18..30))
+  g.V().has('name', without(["any", "value"]))
+  ```
+  """
+  def without(%Range{} = range) do
+    enqueue(Queue.new(), "without", [range])
+  end
+
+  def without(values) do
+    enqueue(Queue.new(), "without", values)
+  end
+
+  @doc """
   Compiles a graph into the Gremlin query.
   """
   @spec encode(Gremlex.Graph.t()) :: String.t()
@@ -633,6 +667,9 @@ defmodule Gremlex.Graph do
 
         arg when is_number(arg) or is_atom(arg) ->
           "#{arg}"
+
+        %Range{first: first, last: last} ->
+          "#{first}..#{last}"
 
         arg when is_tuple(arg) ->
           case :queue.is_queue(arg) and :queue.get(arg) do

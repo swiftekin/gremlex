@@ -611,6 +611,34 @@ defmodule Gremlex.GraphTests do
     end
   end
 
+  describe "within/1" do
+    test "creates a queue with the within function using a range arg" do
+      actual_graph = within(1..5)
+      expected_graph = Queue.in({"within", [1..5]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "creates a queue with the within function using a list arg" do
+      actual_graph = within([1, 2, 3])
+      expected_graph = Queue.in({"within", [1, 2, 3]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
+  describe "without/1" do
+    test "creates a queue with the without function using a range arg" do
+      actual_graph = without(1..5)
+      expected_graph = Queue.in({"without", [1..5]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+
+    test "creates a queue with the without function using a list arg" do
+      actual_graph = without([1, 2, 3])
+      expected_graph = Queue.in({"without", [1, 2, 3]}, Queue.new())
+      assert actual_graph == expected_graph
+    end
+  end
+
   describe "encode/1" do
     test "compiles queue into a query" do
       graph =
@@ -700,6 +728,15 @@ defmodule Gremlex.GraphTests do
       graph = g() |> v() |> has("name", nil)
 
       expected_query = "g.V().has('name', none)"
+
+      actual_query = encode(graph)
+      assert actual_query == expected_query
+    end
+
+    test "compiles queue with range value" do
+      graph = g() |> v() |> has("age", within(1..18))
+
+      expected_query = "g.V().has('age', within(1..18))"
 
       actual_query = encode(graph)
       assert actual_query == expected_query
