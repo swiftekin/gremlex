@@ -30,8 +30,7 @@ defmodule Gremlex.Application do
     end
   end
 
-  defp build_app_worker(:not_set, :not_set, :not_set, :not_set, :not_set) do
-    Logger.warn("Gremlex application will not start because of missing configuration.")
+  defp build_app_worker(:not_set, :not_set, :not_set, :not_set, _) do
     []
   end
 
