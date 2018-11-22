@@ -59,7 +59,8 @@ defmodule Gremlex.Client do
   end
 
   # Server Methods
-  @spec handle_call({:query, String.t(), number() | :infinity}, pid(), state) :: {:reply, response, state}
+  @spec handle_call({:query, String.t(), number() | :infinity}, pid(), state) ::
+          {:reply, response, state}
   def handle_call({:query, payload, timeout}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
 
