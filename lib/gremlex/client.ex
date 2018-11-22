@@ -41,26 +41,30 @@ defmodule Gremlex.Client do
 
   @doc """
   Accepts a graph which it converts into a query and queries the database.
+
+  Params:
+  * query - A `Gremlex.Graph.t` or raw String query
+  * timeout (Default: 5000ms) - Timeout in milliseconds to pass to GenServer and Task.await call
   """
-  @spec query(Gremlex.Graph.t() | String.t()) :: Response
-  def query(query) do
+  @spec query(Gremlex.Graph.t() | String.t(), number() | :infinity) :: Response
+  def query(query, timeout \\ 5000) do
     payload =
       query
       |> Request.new()
       |> Poison.encode!()
 
     :poolboy.transaction(:gremlex, fn worker_pid ->
-      GenServer.call(worker_pid, {:query, payload})
+      GenServer.call(worker_pid, {:query, payload, timeout}, timeout)
     end)
   end
 
   # Server Methods
-  @spec handle_call({:query, String.t()}, pid(), state) :: {:reply, response, state}
-  def handle_call({:query, payload}, _from, %{socket: socket} = state) do
+  @spec handle_call({:query, String.t(), number() | :infinity}, pid(), state) :: {:reply, response, state}
+  def handle_call({:query, payload, timeout}, _from, %{socket: socket} = state) do
     Socket.Web.send!(socket, {:text, payload})
 
     task = Task.async(fn -> recv(socket) end)
-    result = Task.await(task)
+    result = Task.await(task, timeout)
 
     {:reply, result, state}
   end
