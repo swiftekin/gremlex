@@ -21,8 +21,9 @@ defmodule Gremlex.Client do
 
   defp parse_delay(value) when is_binary(value) do
     case Integer.parse(value) do
-      {delay, ""}  ->
+      {delay, ""} ->
         delay
+
       _ ->
         Logger.warn("Found invalid ping delay value: #{value} -- Defaulting to 0")
         0
@@ -38,6 +39,7 @@ defmodule Gremlex.Client do
     case Confex.fetch_env(:gremlex, :ping_delay) do
       {:ok, value} ->
         parse_delay(value)
+
       _ ->
         0
     end
@@ -105,6 +107,7 @@ defmodule Gremlex.Client do
   defp schedule do
     delay = get_delay()
     Logger.debug("Delay: #{delay}")
+
     if delay > 0 do
       Process.send_after(self(), :ping, delay)
     end
