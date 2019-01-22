@@ -88,6 +88,7 @@ config :gremlex,
   path: "/gremlin",
   pool_size: 10,
   secure: false
+  ping_delay: 60_000
 ```
 
 Gremlex uses [confex](https://github.com/Nebo15/confex), so that you can easily define
@@ -100,6 +101,7 @@ simply have the parameters that need to be dynamically read at run time set to `
 * `path`: Websocket path to Gremlin (defaults to "/gremlin")
 * `pool_size`: The number of connections to keep open in the pool (defaults to 10)
 * `secure`: Set to `true` to connect to a server with SSL enabled
+* `ping_delay`: Delay in milliseconds to send a pong frame to the server. If 0, then a pong frame won't be scheduled. (defaults to 0)
 
 ## Contributing
 
