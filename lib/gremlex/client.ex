@@ -19,6 +19,32 @@ defmodule Gremlex.Client do
   alias Gremlex.Request
   alias Gremlex.Deserializer
 
+  defp parse_delay(value) when is_binary(value) do
+    case Integer.parse(value) do
+      {delay, ""} ->
+        delay
+
+      _ ->
+        Logger.warn("Found invalid ping delay value: #{value} -- Defaulting to 0")
+        0
+    end
+  end
+
+  defp parse_delay(delay) when is_number(delay), do: delay
+
+  defp parse_delay(_), do: 0
+
+  @spec get_delay() :: number()
+  defp get_delay do
+    case Confex.fetch_env(:gremlex, :ping_delay) do
+      {:ok, value} ->
+        parse_delay(value)
+
+      _ ->
+        0
+    end
+  end
+
   @spec start_link({String.t(), number(), String.t(), boolean()}) :: pid()
   def start_link({host, port, path, secure}) do
     case Socket.Web.connect(host, port, path: path, secure: secure) do
@@ -34,6 +60,7 @@ defmodule Gremlex.Client do
   @spec init(Socket.Web.t()) :: state
   def init(socket) do
     state = %{socket: socket}
+    schedule()
     {:ok, state}
   end
 
@@ -68,6 +95,22 @@ defmodule Gremlex.Client do
     result = Task.await(task, timeout)
 
     {:reply, result, state}
+  end
+
+  def handle_info(:ping, %{socket: socket} = state) do
+    Logger.debug("Ping!")
+    Socket.Web.send!(socket, {:pong, ""})
+    schedule()
+    {:noreply, state}
+  end
+
+  defp schedule do
+    delay = get_delay()
+    Logger.debug("Delay: #{delay}")
+
+    if delay > 0 do
+      Process.send_after(self(), :ping, delay)
+    end
   end
 
   # Private Methods
