@@ -645,7 +645,7 @@ defmodule Gremlex.Graph do
   """
   @spec encode(Gremlex.Graph.t()) :: String.t()
   def encode(graph) do
-    encode(graph, "g")
+    encode(graph, "graph_traversal")
   end
 
   defp encode({[], []}, acc), do: acc
@@ -673,7 +673,7 @@ defmodule Gremlex.Graph do
 
         arg when is_tuple(arg) ->
           case :queue.is_queue(arg) and :queue.get(arg) do
-            {"V", _} -> encode(arg, "g")
+            {"V", _} -> encode(arg, "graph_traversal")
             _ -> encode(arg, "")
           end
 
